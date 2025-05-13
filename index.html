@@ -140,14 +140,15 @@
             transition: transform 1s ease;
         }
         
-        .car-animation {
-            animation: carMove 10s infinite linear;
-        }
-        
-        @keyframes carMove {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
+.car-animation {
+  animation: carMove 10s infinite linear;
+}
+
+@keyframes carMove {
+  0% { transform: translateX(-10rem); } /* Empieza fuera del header */
+  100% { transform: translateX(100vw); } /* Llega más allá del borde derecho */
+}
+
         
         .definition-box {
             border-left: 4px solid #3182ce;
@@ -239,9 +240,9 @@
                     </div>
                 </div>
             </div>
-            <div class="relative w-full h-16 mt-4 overflow-hidden">
+          <div class="relative w-full h-16 mt-4 overflow-hidden">
   <div class="absolute bottom-0 left-0 w-full h-full">
-    <div class="car-animation absolute bottom-0 left-0 w-32 h-16">
+    <div class="car-animation absolute bottom-0" style="width: 8rem; height: 4rem;">
       <svg viewBox="0 0 80 40" class="w-full h-full">
         <rect x="10" y="20" width="60" height="15" rx="5" fill="#3182ce"></rect>
         <rect x="20" y="10" width="30" height="15" rx="3" fill="#2c5282"></rect>
@@ -254,6 +255,7 @@
     </div>
   </div>
 </div>
+
 
         </header>
         
