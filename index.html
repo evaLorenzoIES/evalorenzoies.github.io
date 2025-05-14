@@ -592,6 +592,33 @@
                                     <p class="text-xs text-gray-600">Aumenta el riesgo de vuelcos o salidas de la vía</p>
                                 </div>
                             </div>
+
+<div class="consequence-card bg-white p-4 rounded-lg shadow flex items-start">
+  <div class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
+    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM10 8a2 2 0 110 4 2 2 0 010-4z" clip-rule="evenodd"></path>
+    </svg>
+  </div>
+  <div>
+    <h4 class="font-semibold mb-1">Incrementa la gravedad de las colisiones</h4>
+    <p class="text-xs text-gray-600">A mayor velocidad, mayor es la energía liberada al chocar</p>
+  </div>
+</div>
+
+<div class="consequence-card bg-white p-4 rounded-lg shadow flex items-start">
+  <div class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
+    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm-1 5a1 1 0 112 0v2a1 1 0 11-2 0V7zm1 6a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" clip-rule="evenodd"/>
+    </svg>
+  </div>
+  <div>
+    <h4 class="font-semibold mb-1">Genera en otros conductores</h4>
+    <p class="text-xs text-gray-600">La velocidad excesiva puede intimidar o poner nerviosos a quienes comparten la vía</p>
+  </div>
+</div>
+
+
+
                         </div>
                     </div>
 
@@ -716,9 +743,12 @@
       <label><input type="radio" name="q3" value="c" class="mr-2">Mejorar el consumo del vehículo solamente</label>
     </div>
 
-    <div class="text-center">
-      <button type="button" onclick="checkQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded">
+    <div class="text-center space-x-2">
+      <button id="checkBtn" type="button" onclick="checkQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded">
         Comprobar respuestas
+      </button>
+      <button id="resetBtn" type="button" onclick="resetQuiz()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-4 py-2 rounded" disabled>
+        Reiniciar quiz
       </button>
       <p id="quizResult" class="mt-4 font-semibold"></p>
     </div>
@@ -732,6 +762,7 @@
       q2: 'b',
       q3: 'b'
     };
+
     let correct = 0;
     for (let q in answers) {
       const selected = document.querySelector(`input[name="${q}"]:checked`);
@@ -739,6 +770,7 @@
         correct++;
       }
     }
+
     const result = document.getElementById("quizResult");
     if (correct === 3) {
       result.textContent = "✅ ¡Perfecto! Has acertado todo. ¡Sigue así!";
@@ -747,8 +779,20 @@
       result.textContent = `🔍 Has acertado ${correct} de 3. Revisa la información y vuelve a intentarlo.`;
       result.className = "text-yellow-600 mt-4 font-semibold";
     }
+
+    // Desactiva el botón de comprobar y activa el de reiniciar
+    document.getElementById("checkBtn").disabled = true;
+    document.getElementById("resetBtn").disabled = false;
+  }
+
+  function resetQuiz() {
+    document.getElementById("quizForm").reset();
+    document.getElementById("quizResult").textContent = "";
+    document.getElementById("checkBtn").disabled = false;
+    document.getElementById("resetBtn").disabled = true;
   }
 </script>
+
 
                     
 
