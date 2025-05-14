@@ -689,65 +689,7 @@
                             </div>
                         </div>
                     </div>
-                <!-- Mini Quiz Interactivo -->
-
-  <h3 class="text-lg font-bold text-center mb-4">🧠 ¿Cuánto sabes sobre velocidad y seguridad vial?</h3>
-  <form id="quizForm" class="space-y-6 text-sm text-gray-700">
-    
-    <div>
-      <p class="font-semibold mb-2">1. ¿Cuál es la probabilidad de que un peatón muera si es atropellado a 80 km/h?</p>
-      <label><input type="radio" name="q1" value="a" class="mr-2">5%</label><br>
-      <label><input type="radio" name="q1" value="b" class="mr-2">50%</label><br>
-      <label><input type="radio" name="q1" value="c" class="mr-2">Casi el 100%</label>
-    </div>
-
-    <div>
-      <p class="font-semibold mb-2">2. ¿Qué efecto tiene una velocidad más alta en un choque?</p>
-      <label><input type="radio" name="q2" value="a" class="mr-2">Menos lesiones</label><br>
-      <label><input type="radio" name="q2" value="b" class="mr-2">Mayor energía y más gravedad</label><br>
-      <label><input type="radio" name="q2" value="c" class="mr-2">Más fácil de controlar el vehículo</label>
-    </div>
-
-    <div>
-      <p class="font-semibold mb-2">3. ¿Qué podría lograrse si se redujera solo 1 km/h la velocidad media?</p>
-      <label><input type="radio" name="q3" value="a" class="mr-2">No tiene impacto</label><br>
-      <label><input type="radio" name="q3" value="b" class="mr-2">Evitar hasta 2.200 muertes al año en la UE</label><br>
-      <label><input type="radio" name="q3" value="c" class="mr-2">Mejorar el consumo del vehículo solamente</label>
-    </div>
-
-    <div class="text-center">
-      <button type="button" onclick="checkQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded">
-        Comprobar respuestas
-      </button>
-      <p id="quizResult" class="mt-4 font-semibold"></p>
-    </div>
-  </form>
-
-
-<script>
-  function checkQuiz() {
-    const answers = {
-      q1: 'c',
-      q2: 'b',
-      q3: 'b'
-    };
-    let correct = 0;
-    for (let q in answers) {
-      const selected = document.querySelector(`input[name="${q}"]:checked`);
-      if (selected && selected.value === answers[q]) {
-        correct++;
-      }
-    }
-    const result = document.getElementById("quizResult");
-    if (correct === 3) {
-      result.textContent = "✅ ¡Perfecto! Has acertado todo. ¡Sigue así!";
-      result.className = "text-green-600 mt-4 font-semibold";
-    } else {
-      result.textContent = `🔍 Has acertado ${correct} de 3. Revisa la información y vuelve a intentarlo.`;
-      result.className = "text-yellow-600 mt-4 font-semibold";
-    }
-  }
-</script>
+  
 
             </section>
             
