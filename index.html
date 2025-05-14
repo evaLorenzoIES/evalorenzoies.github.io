@@ -209,11 +209,11 @@
                                 <span>13-05-2025</span>
                             </div>
                         </div>
-                        <div class="flex items-center">
-                                    <p>Eva Lorenzo</p>
+                        <div class="flex items-center" style="margin-top: 10px;">
+                                    <p style="list-style-type: disc; margin-left: 10px;">Eva Lorenzo</p>
                             </div>
                             <div class="flex items-center">
-                                    <p>Ainhara Blanco</p>
+                                    <p style="list-style-type: disc; margin-left: 10px;">Ainhara Blanco</p>
                             </div>
                     </div>
                     <div class="mt-4 md:mt-0 flex items-center">
@@ -612,7 +612,7 @@
     </svg>
   </div>
   <div>
-    <h4 class="font-semibold mb-1">Genera en otros conductores</h4>
+    <h4 class="font-semibold mb-1">Genera tensión en otros conductores</h4>
     <p class="text-xs text-gray-600">La velocidad excesiva puede intimidar o poner nerviosos a quienes comparten la vía</p>
   </div>
 </div>
@@ -780,18 +780,40 @@
       result.className = "text-yellow-600 mt-4 font-semibold";
     }
 
-    // Desactiva el botón de comprobar y activa el de reiniciar
-    document.getElementById("checkBtn").disabled = true;
-    document.getElementById("resetBtn").disabled = false;
+    // Desactiva botón "Comprobar respuestas"
+    const checkBtn = document.getElementById("checkBtn");
+    checkBtn.disabled = true;
+    checkBtn.classList.add("bg-gray-300", "cursor-not-allowed");
+    checkBtn.classList.remove("bg-blue-600", "hover:bg-blue-700");
+
+    // Activa botón "Reiniciar quiz"
+    const resetBtn = document.getElementById("resetBtn");
+    resetBtn.disabled = false;
+
+    // Desactiva todos los inputs tipo radio
+    const radios = document.querySelectorAll("#quizForm input[type='radio']");
+    radios.forEach(radio => radio.disabled = true);
   }
 
   function resetQuiz() {
     document.getElementById("quizForm").reset();
     document.getElementById("quizResult").textContent = "";
-    document.getElementById("checkBtn").disabled = false;
+
+    // Vuelve a activar los inputs tipo radio
+    const radios = document.querySelectorAll("#quizForm input[type='radio']");
+    radios.forEach(radio => radio.disabled = false);
+
+    // Reactiva botón "Comprobar respuestas"
+    const checkBtn = document.getElementById("checkBtn");
+    checkBtn.disabled = false;
+    checkBtn.classList.remove("bg-gray-300", "cursor-not-allowed");
+    checkBtn.classList.add("bg-blue-600", "hover:bg-blue-700");
+
+    // Desactiva botón "Reiniciar"
     document.getElementById("resetBtn").disabled = true;
   }
 </script>
+
 
 
                     
