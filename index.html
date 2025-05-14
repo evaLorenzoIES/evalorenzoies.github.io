@@ -501,6 +501,55 @@
                     </div>
                 </div>
             </section>
+
+            <section class="my-10 bg-gray-50 p-6 rounded-lg shadow-md">
+  <h2 class="text-xl font-bold mb-4">🚗 Simulador de Distancia de Frenado</h2>
+
+  <!-- Control de velocidad -->
+  <label for="velocidad" class="block mb-2 font-medium">Velocidad (km/h): <span id="velocidadValor">50</span></label>
+  <input type="range" id="velocidad" min="10" max="150" step="1" value="50" class="w-full mb-4">
+
+  <!-- Resultado de la distancia -->
+  <div class="mb-2">
+    <strong>Distancia de frenado estimada:</strong> <span id="distancia">...</span> metros
+  </div>
+
+  <!-- Barra de visualización -->
+  <div class="w-full h-6 bg-gray-300 rounded-full overflow-hidden">
+    <div id="barra" class="h-full bg-red-500 transition-all duration-300 ease-out" style="width: 0%;"></div>
+  </div>
+</section>
+
+<script>
+  const velocidadInput = document.getElementById('velocidad');
+  const velocidadValor = document.getElementById('velocidadValor');
+  const distanciaTexto = document.getElementById('distancia');
+  const barra = document.getElementById('barra');
+
+  // Constantes para la fórmula
+  const tiempoReaccion = 1.5; // en segundos
+  const desaceleracion = 8; // m/s² (valor medio)
+
+  function actualizarDistancia() {
+    const velocidadKmH = parseInt(velocidadInput.value);
+    velocidadValor.textContent = velocidadKmH;
+
+    const velocidadMS = velocidadKmH / 3.6; // conversión a m/s
+
+    // Fórmula de distancia de frenado
+    const distancia = velocidadMS * tiempoReaccion + (velocidadMS ** 2) / (2 * desaceleracion);
+    const distanciaRedondeada = distancia.toFixed(1);
+    distanciaTexto.textContent = distanciaRedondeada;
+
+    // Actualizar barra proporcional (máximo a 300m)
+    const ancho = Math.min((distancia / 300) * 100, 100); // max 100%
+    barra.style.width = `${ancho}%`;
+  }
+
+  velocidadInput.addEventListener('input', actualizarDistancia);
+  actualizarDistancia(); // inicializar al cargar
+</script>
+
             
             <!-- Section 1: Accidents and Deaths Caused by Speeding -->
             <section class="mb-12">
@@ -742,6 +791,13 @@
       <label><input type="radio" name="q3" value="c" class="mr-2">Mejorar el consumo del vehículo solamente</label>
     </div>
 
+    <div>
+      <p class="font-semibold mb-2">4. La distancia de frenado...</p>
+      <label><input type="radio" name="q4" value="a" class="mr-2">Es la distancia que recorre el vehículo desde que el conductor percibe un peligro hasta que reacciona</label><br>
+      <label><input type="radio" name="q4" value="b" class="mr-2">Es la distancia total que recorre el vehículo hasta que se detiene</label><br>
+      <label><input type="radio" name="q4" value="c" class="mr-2">Es la distancia que recorre el vehículo desde que el conductor pisa el freno hasta que se detiene</label>
+    </div>
+
     <div class="text-center space-x-2">
       <button id="checkBtn" type="button" onclick="checkQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded">
         Comprobar respuestas
@@ -759,7 +815,8 @@
     const answers = {
       q1: 'c',
       q2: 'b',
-      q3: 'b'
+      q3: 'b',
+      q4: 'c'
     };
 
     let correct = 0;
@@ -771,11 +828,11 @@
     }
 
     const result = document.getElementById("quizResult");
-    if (correct === 3) {
+    if (correct === 4) {
       result.textContent = "✅ ¡Perfecto! Has acertado todo. ¡Sigue así!";
       result.className = "text-green-600 mt-4 font-semibold";
     } else {
-      result.textContent = `🔍 Has acertado ${correct} de 3. Revisa la información y vuelve a intentarlo.`;
+      result.textContent = `🔍 Has acertado ${correct} de 4. Revisa la información y vuelve a intentarlo.`;
       result.className = "text-yellow-600 mt-4 font-semibold";
     }
 
