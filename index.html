@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="es"><script src="chrome-extension://nimlmejbmnecnaghgmbahmbaddhjbecg/libs/extend-native-history-api.js"></script><script src="chrome-extension://nimlmejbmnecnaghgmbahmbaddhjbecg/libs/requests.js"></script><head>
+<html lang="es">
+<script src="chrome-extension://nimlmejbmnecnaghgmbahmbaddhjbecg/libs/extend-native-history-api.js"></script>
+<script src="chrome-extension://nimlmejbmnecnaghgmbahmbaddhjbecg/libs/requests.js"></script>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impacto del Exceso de Velocidad en los Accidentes de Tráfico</title>
@@ -7,48 +11,53 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
-        
+
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #f0f4f8;
             color: #2d3748;
             scroll-behavior: smooth;
         }
-        
+
         .gradient-bg {
             background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
         }
-        
+
         .stat-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border-radius: 12px;
             overflow: hidden;
         }
-        
+
         .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        
+
         .tab-active {
             background-color: #3182ce;
             color: white;
         }
-        
+
         .fade-in {
             animation: fadeIn 0.5s ease-in;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
-        
+
         .section-header {
             position: relative;
             padding-left: 1.5rem;
         }
-        
+
         .section-header::before {
             content: '';
             position: absolute;
@@ -59,30 +68,30 @@
             background: linear-gradient(to bottom, #3182ce, #2c5282);
             border-radius: 3px;
         }
-        
+
         .consequence-card {
             transition: all 0.3s ease;
         }
-        
+
         .consequence-card:hover {
             transform: scale(1.03);
         }
-        
+
         .factor-bubble {
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        
+
         .factor-bubble:hover {
             transform: scale(1.1);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
-        
+
         .highlight-box {
             position: relative;
             overflow: hidden;
         }
-        
+
         .highlight-box::before {
             content: '';
             position: absolute;
@@ -93,17 +102,17 @@
             background: linear-gradient(135deg, rgba(49, 130, 206, 0.1) 0%, rgba(44, 82, 130, 0.1) 100%);
             z-index: -1;
         }
-        
+
         .comparison-card {
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
         }
-        
+
         .comparison-card:hover {
             transform: translateY(-5px);
         }
-        
+
         .comparison-card::after {
             content: '';
             position: absolute;
@@ -113,43 +122,59 @@
             height: 4px;
             background: linear-gradient(to right, #3182ce, #2c5282);
         }
-        
+
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
-        
+
         .pulse-animation {
             animation: pulse 2s infinite;
         }
-        
+
         .speedometer {
             position: relative;
             width: 100px;
             height: 100px;
         }
-        
+
         .speedometer-arc {
             fill: none;
             stroke-width: 8;
         }
-        
+
         .speedometer-needle {
             transform-origin: center;
             transition: transform 1s ease;
         }
-        
-.car-animation {
-  animation: carMove 15s infinite linear;
-}
 
-@keyframes carMove {
-  0% { transform: translateX(-10rem); } /* Empieza fuera del header */
-  100% { transform: translateX(100vw); } /* Llega más allá del borde derecho */
-}
+        .car-animation {
+            animation: carMove 15s infinite linear;
+        }
 
-        
+        @keyframes carMove {
+            0% {
+                transform: translateX(-10rem);
+            }
+
+            /* Empieza fuera del header */
+            100% {
+                transform: translateX(100vw);
+            }
+
+            /* Llega más allá del borde derecho */
+        }
+
+
         .definition-box {
             border-left: 4px solid #3182ce;
             background-color: #ebf8ff;
@@ -157,18 +182,992 @@
             margin: 1rem 0;
             border-radius: 0 0.5rem 0.5rem 0;
         }
-        
+
         .image-container {
             overflow: hidden;
             border-radius: 8px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-        
+
         .image-overlay {
-            background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.7) 100%);
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.7) 100%);
         }
     </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.absolute{position:absolute}.relative{position:relative}.inset-0{inset:0px}.inset-x-0{left:0px;right:0px}.inset-y-0{top:0px;bottom:0px}.-right-4{right:-1rem}.-top-4{top:-1rem}.bottom-0{bottom:0px}.left-0{left:0px}.top-0{top:0px}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-12{margin-bottom:3rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-2{margin-left:0.5rem}.mr-2{margin-right:0.5rem}.mr-3{margin-right:0.75rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.h-12{height:3rem}.h-16{height:4rem}.h-2{height:0.5rem}.h-24{height:6rem}.h-32{height:8rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-64{height:16rem}.h-8{height:2rem}.h-80{height:20rem}.h-full{height:100%}.w-1\/5{width:20%}.w-32{width:8rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-8{width:2rem}.w-full{width:100%}.max-w-6xl{max-width:72rem}.flex-shrink-0{flex-shrink:0}.list-disc{list-style-type:disc}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.justify-around{justify-content:space-around}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.rounded{border-radius:0.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded-l-lg{border-top-left-radius:0.5rem;border-bottom-left-radius:0.5rem}.rounded-r-lg{border-top-right-radius:0.5rem;border-bottom-right-radius:0.5rem}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-blue-200{--tw-bg-opacity:1;background-color:rgb(191 219 254 / var(--tw-bg-opacity, 1))}.bg-blue-400{--tw-bg-opacity:1;background-color:rgb(96 165 250 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-gray-700{--tw-bg-opacity:1;background-color:rgb(55 65 81 / var(--tw-bg-opacity, 1))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-green-200{--tw-bg-opacity:1;background-color:rgb(187 247 208 / var(--tw-bg-opacity, 1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.bg-red-100{--tw-bg-opacity:1;background-color:rgb(254 226 226 / var(--tw-bg-opacity, 1))}.bg-red-200{--tw-bg-opacity:1;background-color:rgb(254 202 202 / var(--tw-bg-opacity, 1))}.bg-red-400{--tw-bg-opacity:1;background-color:rgb(248 113 113 / var(--tw-bg-opacity, 1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-100{--tw-bg-opacity:1;background-color:rgb(254 249 195 / var(--tw-bg-opacity, 1))}.bg-yellow-200{--tw-bg-opacity:1;background-color:rgb(254 240 138 / var(--tw-bg-opacity, 1))}.bg-yellow-400{--tw-bg-opacity:1;background-color:rgb(250 204 21 / var(--tw-bg-opacity, 1))}.bg-yellow-500{--tw-bg-opacity:1;background-color:rgb(234 179 8 / var(--tw-bg-opacity, 1))}.bg-opacity-50{--tw-bg-opacity:0.5}.bg-opacity-70{--tw-bg-opacity:0.7}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pl-5{padding-left:1.25rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-semibold{font-weight:600}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-red-700{--tw-text-opacity:1;color:rgb(185 28 28 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-600{--tw-text-opacity:1;color:rgb(202 138 4 / var(--tw-text-opacity, 1))}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-inner{--tw-shadow:inset 0 2px 4px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:inset 0 2px 4px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}@media (min-width: 640px){.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 768px){.md\:mt-0{margin-top:0px}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}}</style><script bis_use="true" type="text/javascript" charset="utf-8" data-bis-config="[&quot;facebook.com/&quot;,&quot;twitter.com/&quot;,&quot;youtube-nocookie.com/embed/&quot;,&quot;//vk.com/&quot;,&quot;//www.vk.com/&quot;,&quot;linkedin.com/&quot;,&quot;//www.linkedin.com/&quot;,&quot;//instagram.com/&quot;,&quot;//www.instagram.com/&quot;,&quot;//www.google.com/recaptcha/api2/&quot;,&quot;//hangouts.google.com/webchat/&quot;,&quot;//www.google.com/calendar/&quot;,&quot;//www.google.com/maps/embed&quot;,&quot;spotify.com/&quot;,&quot;soundcloud.com/&quot;,&quot;//player.vimeo.com/&quot;,&quot;//disqus.com/&quot;,&quot;//tgwidget.com/&quot;,&quot;//js.driftt.com/&quot;,&quot;friends2follow.com&quot;,&quot;/widget&quot;,&quot;login&quot;,&quot;//video.bigmir.net/&quot;,&quot;blogger.com&quot;,&quot;//smartlock.google.com/&quot;,&quot;//keep.google.com/&quot;,&quot;/web.tolstoycomments.com/&quot;,&quot;moz-extension://&quot;,&quot;chrome-extension://&quot;,&quot;/auth/&quot;,&quot;//analytics.google.com/&quot;,&quot;adclarity.com&quot;,&quot;paddle.com/checkout&quot;,&quot;hcaptcha.com&quot;,&quot;recaptcha.net&quot;,&quot;2captcha.com&quot;,&quot;accounts.google.com&quot;,&quot;www.google.com/shopping/customerreviews&quot;,&quot;buy.tinypass.com&quot;,&quot;gstatic.com&quot;,&quot;secureir.ebaystatic.com&quot;,&quot;docs.google.com&quot;,&quot;contacts.google.com&quot;,&quot;github.com&quot;,&quot;mail.google.com&quot;,&quot;chat.google.com&quot;,&quot;audio.xpleer.com&quot;,&quot;keepa.com&quot;,&quot;static.xx.fbcdn.net&quot;,&quot;sas.selleramp.com&quot;,&quot;1plus1.video&quot;,&quot;console.googletagservices.com&quot;,&quot;//lnkd.demdex.net/&quot;,&quot;//radar.cedexis.com/&quot;,&quot;//li.protechts.net/&quot;,&quot;challenges.cloudflare.com/&quot;,&quot;ogs.google.com&quot;]" src="chrome-extension://nimlmejbmnecnaghgmbahmbaddhjbecg/executors/traffic.js"></script></head>
+    <style>
+        *,
+        ::before,
+        ::after {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246 / 0.5);
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style:
+        }
+
+        ::backdrop {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246 / 0.5);
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style:
+        }
+
+        /* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */
+        *,
+        ::after,
+        ::before {
+            box-sizing: border-box;
+            border-width: 0;
+            border-style: solid;
+            border-color: #e5e7eb
+        }
+
+        ::after,
+        ::before {
+            --tw-content: ''
+        }
+
+        :host,
+        html {
+            line-height: 1.5;
+            -webkit-text-size-adjust: 100%;
+            -moz-tab-size: 4;
+            tab-size: 4;
+            font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-feature-settings: normal;
+            font-variation-settings: normal;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        body {
+            margin: 0;
+            line-height: inherit
+        }
+
+        hr {
+            height: 0;
+            color: inherit;
+            border-top-width: 1px
+        }
+
+        abbr:where([title]) {
+            -webkit-text-decoration: underline dotted;
+            text-decoration: underline dotted
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-size: inherit;
+            font-weight: inherit
+        }
+
+        a {
+            color: inherit;
+            text-decoration: inherit
+        }
+
+        b,
+        strong {
+            font-weight: bolder
+        }
+
+        code,
+        kbd,
+        pre,
+        samp {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-feature-settings: normal;
+            font-variation-settings: normal;
+            font-size: 1em
+        }
+
+        small {
+            font-size: 80%
+        }
+
+        sub,
+        sup {
+            font-size: 75%;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline
+        }
+
+        sub {
+            bottom: -.25em
+        }
+
+        sup {
+            top: -.5em
+        }
+
+        table {
+            text-indent: 0;
+            border-color: inherit;
+            border-collapse: collapse
+        }
+
+        button,
+        input,
+        optgroup,
+        select,
+        textarea {
+            font-family: inherit;
+            font-feature-settings: inherit;
+            font-variation-settings: inherit;
+            font-size: 100%;
+            font-weight: inherit;
+            line-height: inherit;
+            letter-spacing: inherit;
+            color: inherit;
+            margin: 0;
+            padding: 0
+        }
+
+        button,
+        select {
+            text-transform: none
+        }
+
+        button,
+        input:where([type=button]),
+        input:where([type=reset]),
+        input:where([type=submit]) {
+            -webkit-appearance: button;
+            background-color: transparent;
+            background-image: none
+        }
+
+        :-moz-focusring {
+            outline: auto
+        }
+
+        :-moz-ui-invalid {
+            box-shadow: none
+        }
+
+        progress {
+            vertical-align: baseline
+        }
+
+        ::-webkit-inner-spin-button,
+        ::-webkit-outer-spin-button {
+            height: auto
+        }
+
+        [type=search] {
+            -webkit-appearance: textfield;
+            outline-offset: -2px
+        }
+
+        ::-webkit-search-decoration {
+            -webkit-appearance: none
+        }
+
+        ::-webkit-file-upload-button {
+            -webkit-appearance: button;
+            font: inherit
+        }
+
+        summary {
+            display: list-item
+        }
+
+        blockquote,
+        dd,
+        dl,
+        figure,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        hr,
+        p,
+        pre {
+            margin: 0
+        }
+
+        fieldset {
+            margin: 0;
+            padding: 0
+        }
+
+        legend {
+            padding: 0
+        }
+
+        menu,
+        ol,
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0
+        }
+
+        dialog {
+            padding: 0
+        }
+
+        textarea {
+            resize: vertical
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            opacity: 1;
+            color: #9ca3af
+        }
+
+        [role=button],
+        button {
+            cursor: pointer
+        }
+
+        :disabled {
+            cursor: default
+        }
+
+        audio,
+        canvas,
+        embed,
+        iframe,
+        img,
+        object,
+        svg,
+        video {
+            display: block;
+            vertical-align: middle
+        }
+
+        img,
+        video {
+            max-width: 100%;
+            height: auto
+        }
+
+        [hidden]:where(:not([hidden=until-found])) {
+            display: none
+        }
+
+        .container {
+            width: 100%
+        }
+
+        @media (min-width: 640px) {
+            .container {
+                max-width: 640px
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 768px
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1024px
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .container {
+                max-width: 1280px
+            }
+        }
+
+        @media (min-width: 1536px) {
+            .container {
+                max-width: 1536px
+            }
+        }
+
+        .absolute {
+            position: absolute
+        }
+
+        .relative {
+            position: relative
+        }
+
+        .inset-0 {
+            inset: 0px
+        }
+
+        .inset-x-0 {
+            left: 0px;
+            right: 0px
+        }
+
+        .inset-y-0 {
+            top: 0px;
+            bottom: 0px
+        }
+
+        .-right-4 {
+            right: -1rem
+        }
+
+        .-top-4 {
+            top: -1rem
+        }
+
+        .bottom-0 {
+            bottom: 0px
+        }
+
+        .left-0 {
+            left: 0px
+        }
+
+        .top-0 {
+            top: 0px
+        }
+
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto
+        }
+
+        .mb-1 {
+            margin-bottom: 0.25rem
+        }
+
+        .mb-12 {
+            margin-bottom: 3rem
+        }
+
+        .mb-2 {
+            margin-bottom: 0.5rem
+        }
+
+        .mb-3 {
+            margin-bottom: 0.75rem
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem
+        }
+
+        .mb-6 {
+            margin-bottom: 1.5rem
+        }
+
+        .mb-8 {
+            margin-bottom: 2rem
+        }
+
+        .ml-2 {
+            margin-left: 0.5rem
+        }
+
+        .mr-2 {
+            margin-right: 0.5rem
+        }
+
+        .mr-3 {
+            margin-right: 0.75rem
+        }
+
+        .mt-1 {
+            margin-top: 0.25rem
+        }
+
+        .mt-2 {
+            margin-top: 0.5rem
+        }
+
+        .mt-3 {
+            margin-top: 0.75rem
+        }
+
+        .mt-4 {
+            margin-top: 1rem
+        }
+
+        .mt-6 {
+            margin-top: 1.5rem
+        }
+
+        .inline-block {
+            display: inline-block
+        }
+
+        .flex {
+            display: flex
+        }
+
+        .grid {
+            display: grid
+        }
+
+        .h-12 {
+            height: 3rem
+        }
+
+        .h-16 {
+            height: 4rem
+        }
+
+        .h-2 {
+            height: 0.5rem
+        }
+
+        .h-24 {
+            height: 6rem
+        }
+
+        .h-32 {
+            height: 8rem
+        }
+
+        .h-4 {
+            height: 1rem
+        }
+
+        .h-5 {
+            height: 1.25rem
+        }
+
+        .h-6 {
+            height: 1.5rem
+        }
+
+        .h-64 {
+            height: 16rem
+        }
+
+        .h-8 {
+            height: 2rem
+        }
+
+        .h-80 {
+            height: 20rem
+        }
+
+        .h-full {
+            height: 100%
+        }
+
+        .w-1\/5 {
+            width: 20%
+        }
+
+        .w-32 {
+            width: 8rem
+        }
+
+        .w-4 {
+            width: 1rem
+        }
+
+        .w-5 {
+            width: 1.25rem
+        }
+
+        .w-6 {
+            width: 1.5rem
+        }
+
+        .w-8 {
+            width: 2rem
+        }
+
+        .w-full {
+            width: 100%
+        }
+
+        .max-w-6xl {
+            max-width: 72rem
+        }
+
+        .flex-shrink-0 {
+            flex-shrink: 0
+        }
+
+        .list-disc {
+            list-style-type: disc
+        }
+
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr))
+        }
+
+        .flex-col {
+            flex-direction: column
+        }
+
+        .flex-wrap {
+            flex-wrap: wrap
+        }
+
+        .items-start {
+            align-items: flex-start
+        }
+
+        .items-center {
+            align-items: center
+        }
+
+        .justify-center {
+            justify-content: center
+        }
+
+        .justify-between {
+            justify-content: space-between
+        }
+
+        .justify-around {
+            justify-content: space-around
+        }
+
+        .gap-4 {
+            gap: 1rem
+        }
+
+        .gap-6 {
+            gap: 1.5rem
+        }
+
+        .space-y-1> :not([hidden])~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(0.25rem * var(--tw-space-y-reverse))
+        }
+
+        .space-y-4> :not([hidden])~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(1rem * var(--tw-space-y-reverse))
+        }
+
+        .overflow-hidden {
+            overflow: hidden
+        }
+
+        .rounded {
+            border-radius: 0.25rem
+        }
+
+        .rounded-full {
+            border-radius: 9999px
+        }
+
+        .rounded-lg {
+            border-radius: 0.5rem
+        }
+
+        .rounded-xl {
+            border-radius: 0.75rem
+        }
+
+        .rounded-l-lg {
+            border-top-left-radius: 0.5rem;
+            border-bottom-left-radius: 0.5rem
+        }
+
+        .rounded-r-lg {
+            border-top-right-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem
+        }
+
+        .bg-blue-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(219 234 254 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-blue-200 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(191 219 254 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-blue-400 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(96 165 250 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-blue-50 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(239 246 255 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-gray-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-gray-700 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(55 65 81 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-gray-800 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-green-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(220 252 231 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-green-200 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(187 247 208 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-green-500 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(34 197 94 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-indigo-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(224 231 255 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-purple-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(243 232 255 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-red-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-red-200 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(254 202 202 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-red-400 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(248 113 113 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-red-500 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-white {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-yellow-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(254 249 195 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-yellow-200 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(254 240 138 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-yellow-400 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(250 204 21 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-yellow-500 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(234 179 8 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-opacity-50 {
+            --tw-bg-opacity: 0.5
+        }
+
+        .bg-opacity-70 {
+            --tw-bg-opacity: 0.7
+        }
+
+        .p-3 {
+            padding: 0.75rem
+        }
+
+        .p-4 {
+            padding: 1rem
+        }
+
+        .p-6 {
+            padding: 1.5rem
+        }
+
+        .px-2 {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem
+        }
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem
+        }
+
+        .py-1 {
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem
+        }
+
+        .py-8 {
+            padding-top: 2rem;
+            padding-bottom: 2rem
+        }
+
+        .pl-5 {
+            padding-left: 1.25rem
+        }
+
+        .text-center {
+            text-align: center
+        }
+
+        .text-2xl {
+            font-size: 1.5rem;
+            line-height: 2rem
+        }
+
+        .text-3xl {
+            font-size: 1.875rem;
+            line-height: 2.25rem
+        }
+
+        .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem
+        }
+
+        .text-xs {
+            font-size: 0.75rem;
+            line-height: 1rem
+        }
+
+        .font-bold {
+            font-weight: 700
+        }
+
+        .font-semibold {
+            font-weight: 600
+        }
+
+        .text-blue-600 {
+            --tw-text-opacity: 1;
+            color: rgb(37 99 235 / var(--tw-text-opacity, 1))
+        }
+
+        .text-blue-700 {
+            --tw-text-opacity: 1;
+            color: rgb(29 78 216 / var(--tw-text-opacity, 1))
+        }
+
+        .text-gray-500 {
+            --tw-text-opacity: 1;
+            color: rgb(107 114 128 / var(--tw-text-opacity, 1))
+        }
+
+        .text-gray-600 {
+            --tw-text-opacity: 1;
+            color: rgb(75 85 99 / var(--tw-text-opacity, 1))
+        }
+
+        .text-green-600 {
+            --tw-text-opacity: 1;
+            color: rgb(22 163 74 / var(--tw-text-opacity, 1))
+        }
+
+        .text-indigo-600 {
+            --tw-text-opacity: 1;
+            color: rgb(79 70 229 / var(--tw-text-opacity, 1))
+        }
+
+        .text-purple-600 {
+            --tw-text-opacity: 1;
+            color: rgb(147 51 234 / var(--tw-text-opacity, 1))
+        }
+
+        .text-red-600 {
+            --tw-text-opacity: 1;
+            color: rgb(220 38 38 / var(--tw-text-opacity, 1))
+        }
+
+        .text-red-700 {
+            --tw-text-opacity: 1;
+            color: rgb(185 28 28 / var(--tw-text-opacity, 1))
+        }
+
+        .text-white {
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+        }
+
+        .text-yellow-600 {
+            --tw-text-opacity: 1;
+            color: rgb(202 138 4 / var(--tw-text-opacity, 1))
+        }
+
+        .shadow {
+            --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .shadow-inner {
+            --tw-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+            --tw-shadow-colored: inset 0 2px 4px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .shadow-lg {
+            --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .hover\:underline:hover {
+            -webkit-text-decoration-line: underline;
+            text-decoration-line: underline
+        }
+
+        @media (min-width: 640px) {
+            .sm\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+        }
+
+        @media (min-width: 768px) {
+            .md\:mt-0 {
+                margin-top: 0px
+            }
+
+            .md\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+
+            .md\:grid-cols-3 {
+                grid-template-columns: repeat(3, minmax(0, 1fr))
+            }
+
+            .md\:flex-row {
+                flex-direction: row
+            }
+
+            .md\:text-4xl {
+                font-size: 2.25rem;
+                line-height: 2.5rem
+            }
+        }
+    </style>
+    <script bis_use="true" type="text/javascript" charset="utf-8"
+        data-bis-config="[&quot;facebook.com/&quot;,&quot;twitter.com/&quot;,&quot;youtube-nocookie.com/embed/&quot;,&quot;//vk.com/&quot;,&quot;//www.vk.com/&quot;,&quot;linkedin.com/&quot;,&quot;//www.linkedin.com/&quot;,&quot;//instagram.com/&quot;,&quot;//www.instagram.com/&quot;,&quot;//www.google.com/recaptcha/api2/&quot;,&quot;//hangouts.google.com/webchat/&quot;,&quot;//www.google.com/calendar/&quot;,&quot;//www.google.com/maps/embed&quot;,&quot;spotify.com/&quot;,&quot;soundcloud.com/&quot;,&quot;//player.vimeo.com/&quot;,&quot;//disqus.com/&quot;,&quot;//tgwidget.com/&quot;,&quot;//js.driftt.com/&quot;,&quot;friends2follow.com&quot;,&quot;/widget&quot;,&quot;login&quot;,&quot;//video.bigmir.net/&quot;,&quot;blogger.com&quot;,&quot;//smartlock.google.com/&quot;,&quot;//keep.google.com/&quot;,&quot;/web.tolstoycomments.com/&quot;,&quot;moz-extension://&quot;,&quot;chrome-extension://&quot;,&quot;/auth/&quot;,&quot;//analytics.google.com/&quot;,&quot;adclarity.com&quot;,&quot;paddle.com/checkout&quot;,&quot;hcaptcha.com&quot;,&quot;recaptcha.net&quot;,&quot;2captcha.com&quot;,&quot;accounts.google.com&quot;,&quot;www.google.com/shopping/customerreviews&quot;,&quot;buy.tinypass.com&quot;,&quot;gstatic.com&quot;,&quot;secureir.ebaystatic.com&quot;,&quot;docs.google.com&quot;,&quot;contacts.google.com&quot;,&quot;github.com&quot;,&quot;mail.google.com&quot;,&quot;chat.google.com&quot;,&quot;audio.xpleer.com&quot;,&quot;keepa.com&quot;,&quot;static.xx.fbcdn.net&quot;,&quot;sas.selleramp.com&quot;,&quot;1plus1.video&quot;,&quot;console.googletagservices.com&quot;,&quot;//lnkd.demdex.net/&quot;,&quot;//radar.cedexis.com/&quot;,&quot;//li.protechts.net/&quot;,&quot;challenges.cloudflare.com/&quot;,&quot;ogs.google.com&quot;]"
+        src="chrome-extension://nimlmejbmnecnaghgmbahmbaddhjbecg/executors/traffic.js"></script>
+</head>
+
 <body __processed_e9d988b8-01bc-4485-bb1f-542e38d56540__="true" bis_status="ok" bis_frame_id="1022">
     <div class="container mx-auto px-4 py-8 max-w-6xl">
         <!-- Header with School Info -->
@@ -176,125 +1175,149 @@
             <div class="gradient-bg text-white p-6 rounded-xl shadow-lg">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div>
-                        <h1 class="text-3xl md:text-4xl font-bold mb-2">Impacto del Exceso de Velocidad en los Accidentes de Tráfico</h1>
+                        <h1 class="text-3xl md:text-4xl font-bold mb-2">Impacto del Exceso de Velocidad en los
+                            Accidentes de Tráfico</h1>
                         <div class="flex flex-wrap gap-4 mt-4">
                             <div class="flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838l-2.727 1.17 1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
+                                    <path
+                                        d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838l-2.727 1.17 1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z">
+                                    </path>
                                 </svg>
                                 <span>IES Astures</span>
                             </div>
                             <div class="flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path>
+                                    <path
+                                        d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z">
+                                    </path>
                                 </svg>
                                 <span>3º ESO A/B</span>
                             </div>
                             <div class="flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838l-2.727 1.17 1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
+                                    <path
+                                        d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838l-2.727 1.17 1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z">
+                                    </path>
                                 </svg>
                                 <span>Física y Química</span>
                             </div>
                             <div class="flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v1h8v-1zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-1a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v1H1v-3a3 3 0 013.75-2.906z"></path>
+                                    <path
+                                        d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v1h8v-1zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-1a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v1H1v-3a3 3 0 013.75-2.906z">
+                                    </path>
                                 </svg>
                                 <span>Profesora: Ángela Villar Barro</span>
                             </div>
                             <div class="flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                    <path fill-rule="evenodd"
+                                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                        clip-rule="evenodd"></path>
                                 </svg>
-                                <span>13-05-2025</span>
+                                <span>15-05-2025</span>
                             </div>
                         </div>
-                        <ul class="mt-4 space-y-2 list-disc list-inside">
-  <li class="flex items-center">Eva Lorenzo</li>
-  <li class="flex items-center">Ainhara Blanco</li>
-</ul>
+                        <div class="mt-4 space-y-2 list-disc list-inside">
+                            <p class="flex items-center">Eva Lorenzo | Ainhara Blanco</p>
+                        </div>
 
                     </div>
                     <div class="mt-4 md:mt-0 flex items-center">
                         <div class="speedometer mr-2">
                             <svg width="120" height="120" viewBox="0 0 120 120">
                                 <!-- Speedometer background -->
-                                <circle cx="60" cy="60" r="54" fill="#2a4365" stroke="#1a365d" stroke-width="2"></circle>
-                                
+                                <circle cx="60" cy="60" r="54" fill="#2a4365" stroke="#1a365d" stroke-width="2">
+                                </circle>
+
                                 <!-- Speed markings -->
                                 <path class="speedometer-arc" stroke="#48bb78" d="M 18 60 A 42 42 0 0 1 60 18"></path>
                                 <path class="speedometer-arc" stroke="#ecc94b" d="M 60 18 A 42 42 0 0 1 102 60"></path>
                                 <path class="speedometer-arc" stroke="#e53e3e" d="M 102 60 A 42 42 0 0 1 60 102"></path>
-                                
+
                                 <!-- Speed numbers -->
                                 <text x="18" y="65" fill="white" font-size="10" text-anchor="middle">0</text>
                                 <text x="60" y="15" fill="white" font-size="10" text-anchor="middle">50</text>
                                 <text x="102" y="65" fill="white" font-size="10" text-anchor="middle">100</text>
-                                
+
                                 <!-- Center point -->
                                 <circle cx="60" cy="60" r="5" fill="white"></circle>
-                                
+
                                 <!-- Needle -->
-                                <line class="speedometer-needle" x1="60" y1="60" x2="60" y2="25" stroke="white" stroke-width="2" transform="rotate(120, 60, 60)"></line>
-                                
+                                <line class="speedometer-needle" x1="60" y1="60" x2="60" y2="25" stroke="white"
+                                    stroke-width="2" transform="rotate(120, 60, 60)"></line>
+
                                 <!-- Speed label -->
-                                <text x="60" y="85" fill="white" font-size="14" font-weight="bold" text-anchor="middle">EXCESO</text>
+                                <text x="60" y="85" fill="white" font-size="14" font-weight="bold"
+                                    text-anchor="middle">EXCESO</text>
                                 <text x="60" y="100" fill="white" font-size="10" text-anchor="middle">PELIGRO</text>
                             </svg>
                         </div>
                     </div>
                 </div>
             </div>
-          <div class="relative w-full h-16 mt-4 overflow-hidden">
-  <div class="absolute bottom-0 left-0 w-full h-full">
-    <div class="car-animation absolute bottom-0" style="width: 8rem; height: 4rem;">
-      <svg viewBox="0 0 80 40" class="w-full h-full">
-        <rect x="10" y="20" width="60" height="15" rx="5" fill="#3182ce"></rect>
-        <rect x="20" y="10" width="30" height="15" rx="3" fill="#2c5282"></rect>
-        <circle cx="25" cy="35" r="5" fill="#1a202c"></circle>
-        <circle cx="55" cy="35" r="5" fill="#1a202c"></circle>
-        <rect x="65" y="22" width="5" height="3" fill="#f6e05e"></rect>
-        <rect x="10" y="22" width="5" height="3" fill="#f6ad55"></rect>
-        <path d="M30 18 L40 18 L38 12 L32 12 Z" fill="#a0aec0"></path>
-      </svg>
-    </div>
-  </div>
-</div>
+            <div class="relative w-full h-16 mt-4 overflow-hidden">
+                <div class="absolute bottom-0 left-0 w-full h-full">
+                    <div class="car-animation absolute bottom-0" style="width: 8rem; height: 4rem;">
+                        <svg viewBox="0 0 80 40" class="w-full h-full">
+                            <rect x="10" y="20" width="60" height="15" rx="5" fill="#3182ce"></rect>
+                            <rect x="20" y="10" width="30" height="15" rx="3" fill="#2c5282"></rect>
+                            <circle cx="25" cy="35" r="5" fill="#1a202c"></circle>
+                            <circle cx="55" cy="35" r="5" fill="#1a202c"></circle>
+                            <rect x="65" y="22" width="5" height="3" fill="#f6e05e"></rect>
+                            <rect x="10" y="22" width="5" height="3" fill="#f6ad55"></rect>
+                            <path d="M30 18 L40 18 L38 12 L32 12 Z" fill="#a0aec0"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
 
 
         </header>
-        
+
         <!-- Main Infographic Content -->
         <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
             <!-- Stopping Distance Comparison Section (Replacing the simulator) -->
             <section class="mb-12">
                 <h2 class="section-header text-2xl font-bold mb-6">Velocidad y Distancia de Frenado</h2>
-                
+
                 <!-- Definiciones de distancia de reacción y frenado -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div class="definition-box">
                         <h3 class="font-bold text-blue-700 mb-2">Distancia de Reacción</h3>
-                        <p class="text-sm">Es la distancia que recorre el vehículo desde que el conductor percibe un peligro hasta que reacciona pisando el freno. Depende principalmente del tiempo de reacción del conductor (normalmente entre 0,75 y 1 segundo) y de la velocidad a la que circula el vehículo.</p>
+                        <p class="text-sm">Es la distancia que recorre el vehículo desde que el conductor percibe un
+                            peligro hasta que reacciona pisando el freno. Depende principalmente del tiempo de reacción
+                            del conductor (normalmente entre 0,75 y 1 segundo) y de la velocidad a la que circula el
+                            vehículo.</p>
                         <div class="flex items-center mt-3">
                             <svg class="w-6 h-6 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
-                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                                <path fill-rule="evenodd"
+                                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                    clip-rule="evenodd"></path>
                             </svg>
-                            <span class="text-xs text-blue-700 font-semibold">Factores: fatiga, alcohol, distracciones, edad</span>
+                            <span class="text-xs text-blue-700 font-semibold">Factores: fatiga, alcohol, distracciones,
+                                edad</span>
                         </div>
                     </div>
                     <div class="definition-box">
                         <h3 class="font-bold text-red-700 mb-2">Distancia de Frenado</h3>
-                        <p class="text-sm">Es la distancia que recorre el vehículo desde que el conductor pisa el freno hasta que el vehículo se detiene por completo. Aumenta exponencialmente con la velocidad y depende también del estado de los frenos, los neumáticos y la superficie de la carretera.</p>
+                        <p class="text-sm">Es la distancia que recorre el vehículo desde que el conductor pisa el freno
+                            hasta que el vehículo se detiene por completo. Aumenta exponencialmente con la velocidad y
+                            depende también del estado de los frenos, los neumáticos y la superficie de la carretera.
+                        </p>
                         <div class="flex items-center mt-3">
                             <svg class="w-6 h-6 text-red-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                <path fill-rule="evenodd"
+                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                    clip-rule="evenodd"></path>
                             </svg>
                             <span class="text-xs text-red-700 font-semibold">Fórmula: Distancia ∝ Velocidad²</span>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Ilustración del proceso de frenado -->
                 <div class="bg-gray-100 p-4 rounded-lg mb-6">
                     <div class="relative h-24 overflow-hidden rounded-lg">
@@ -309,11 +1332,12 @@
                                 <div class="h-full w-1/5 bg-yellow-400"></div>
                             </div>
                         </div>
-                        
+
                         <!-- Coche y proceso de frenado -->
                         <div class="absolute inset-0 flex items-center px-4">
                             <!-- Zona de reacción -->
-                            <div class="h-16 bg-blue-200 bg-opacity-50 rounded-l-lg flex items-center justify-center px-4" style="width: 30%;">
+                            <div class="h-16 bg-blue-200 bg-opacity-50 rounded-l-lg flex items-center justify-center px-4"
+                                style="width: 30%;">
                                 <div class="relative">
                                     <!-- Coche -->
                                     <svg width="40" height="20" viewBox="0 0 40 20">
@@ -323,16 +1347,20 @@
                                         <circle cx="28" cy="17" r="2.5" fill="#1a202c"></circle>
                                     </svg>
                                     <!-- Icono de ojo -->
-                                    <svg class="absolute -top-4 -right-4 w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <svg class="absolute -top-4 -right-4 w-6 h-6 text-blue-600" fill="currentColor"
+                                        viewBox="0 0 20 20">
                                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
-                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                                        <path fill-rule="evenodd"
+                                            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                            clip-rule="evenodd"></path>
                                     </svg>
                                 </div>
                                 <span class="text-xs font-bold ml-2">REACCIÓN</span>
                             </div>
-                            
+
                             <!-- Zona de frenado -->
-                            <div class="h-16 bg-red-200 bg-opacity-50 rounded-r-lg flex items-center justify-center px-4" style="width: 70%;">
+                            <div class="h-16 bg-red-200 bg-opacity-50 rounded-r-lg flex items-center justify-center px-4"
+                                style="width: 70%;">
                                 <div class="relative">
                                     <!-- Coche frenando -->
                                     <svg width="40" height="20" viewBox="0 0 40 20">
@@ -345,29 +1373,36 @@
                                         <rect x="35" y="12" width="2" height="3" fill="#f56565"></rect>
                                     </svg>
                                     <!-- Icono de freno -->
-                                    <svg class="absolute -top-4 -right-4 w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                    <svg class="absolute -top-4 -right-4 w-6 h-6 text-red-600" fill="currentColor"
+                                        viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                            clip-rule="evenodd"></path>
                                     </svg>
                                 </div>
                                 <span class="text-xs font-bold ml-2">FRENADO</span>
                             </div>
                         </div>
-                        
+
                         <!-- Etiqueta de distancia total -->
-                        <div class="absolute bottom-0 inset-x-0 bg-gray-800 bg-opacity-70 text-white text-xs text-center py-1">
+                        <div
+                            class="absolute bottom-0 inset-x-0 bg-gray-800 bg-opacity-70 text-white text-xs text-center py-1">
                             DISTANCIA TOTAL DE DETENCIÓN = DISTANCIA DE REACCIÓN + DISTANCIA DE FRENADO
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="bg-blue-50 p-6 rounded-lg shadow-inner">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="comparison-card bg-white p-4 rounded-lg shadow">
                             <div class="flex justify-between items-center mb-3">
                                 <div class="flex items-center">
-                                    <div class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                                    <div
+                                        class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
                                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                            <path fill-rule="evenodd"
+                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                clip-rule="evenodd"></path>
                                         </svg>
                                     </div>
                                     <h3 class="font-bold">30 km/h</h3>
@@ -397,13 +1432,16 @@
                                 </svg>
                             </div>
                         </div>
-                        
+
                         <div class="comparison-card bg-white p-4 rounded-lg shadow">
                             <div class="flex justify-between items-center mb-3">
                                 <div class="flex items-center">
-                                    <div class="bg-yellow-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                                    <div
+                                        class="bg-yellow-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
                                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                            <path fill-rule="evenodd"
+                                                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                                clip-rule="evenodd"></path>
                                         </svg>
                                     </div>
                                     <h3 class="font-bold">50 km/h</h3>
@@ -433,13 +1471,16 @@
                                 </svg>
                             </div>
                         </div>
-                        
+
                         <div class="comparison-card bg-white p-4 rounded-lg shadow">
                             <div class="flex justify-between items-center mb-3">
                                 <div class="flex items-center">
-                                    <div class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                                    <div
+                                        class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
                                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                            <path fill-rule="evenodd"
+                                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                                clip-rule="evenodd"></path>
                                         </svg>
                                     </div>
                                     <h3 class="font-bold">120 km/h</h3>
@@ -461,7 +1502,8 @@
                             <div class="mt-2 flex justify-center">
                                 <svg width="70" height="30" viewBox="0 0 70 30">
                                     <path d="M10,20 L15,15 L55,15 L60,20 L60,25 L10,25 Z" fill="#e53e3e"></path>
-                                    <path d="M20,15 L25,8 L45,8 L50,15" fill="none" stroke="#e53e3e" stroke-width="2"></path>
+                                    <path d="M20,15 L25,8 L45,8 L50,15" fill="none" stroke="#e53e3e" stroke-width="2">
+                                    </path>
                                     <rect x="25" y="10" width="20" height="8" rx="2" fill="#c53030"></rect>
                                     <circle cx="20" cy="25" r="4" fill="#1a202c"></circle>
                                     <circle cx="50" cy="25" r="4" fill="#1a202c"></circle>
@@ -471,7 +1513,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="mt-6 p-4 bg-white rounded-lg shadow">
                         <h3 class="font-semibold mb-3 text-center">Componentes de la Distancia de Frenado</h3>
                         <div class="flex flex-col md:flex-row items-center justify-center gap-6">
@@ -481,79 +1523,87 @@
                             </div>
                             <div class="flex items-center">
                                 <div class="w-4 h-4 bg-red-400 rounded mr-2"></div>
-                                <span class="text-sm">Distancia de frenado (Depende de la velocidad y condiciones)</span>
+                                <span class="text-sm">Distancia de frenado (Depende de la velocidad y
+                                    condiciones)</span>
                             </div>
                         </div>
                         <div class="mt-4">
                             <div class="relative h-12 bg-gray-100 rounded-lg overflow-hidden">
-                                <div class="absolute top-0 left-0 h-full bg-blue-400 flex items-center px-2 text-xs text-white font-semibold" style="width: 30%;">
+                                <div class="absolute top-0 left-0 h-full bg-blue-400 flex items-center px-2 text-xs text-white font-semibold"
+                                    style="width: 30%;">
                                     Reacción
                                 </div>
-                                <div class="absolute top-0 left-0 h-full bg-red-400 flex items-center px-2 text-xs text-white font-semibold" style="width: 70%; margin-left: 30%;">
+                                <div class="absolute top-0 left-0 h-full bg-red-400 flex items-center px-2 text-xs text-white font-semibold"
+                                    style="width: 70%; margin-left: 30%;">
                                     Frenado
                                 </div>
                             </div>
                         </div>
                         <div class="mt-4 text-center text-sm">
-                            <p class="font-bold pulse-animation text-red-600">"A 120 km/h, el frenado toma más de 70 metros. A 50 km/h, solo 25 metros."</p>
-                            <p class="mt-2 font-bold text-green-600">"Reducir la velocidad de 50 km/h a 30 km/h puede salvar a 4 de cada 10 peatones."</p>
+                            <p class="font-bold pulse-animation text-red-600">"A 120 km/h, el frenado toma más de 70
+                                metros. A 50 km/h, solo 25 metros."</p>
+                            <p class="mt-2 font-bold text-green-600">"Reducir la velocidad de 50 km/h a 30 km/h puede
+                                salvar a 4 de cada 10 peatones."</p>
                         </div>
                     </div>
                 </div>
             </section>
 
             <section class="my-10 bg-gray-50 p-6 rounded-lg shadow-md">
-  <h2 class="text-xl font-bold mb-4">🚗 Simulador de Distancia de Frenado (aprox)</h2>
+                <h2 class="text-xl font-bold mb-4">🚗 Simulador de Distancia de Frenado (apróx.)</h2>
 
-  <!-- Control de velocidad -->
-  <label for="velocidad" class="block mb-2 font-medium">Velocidad (km/h): <span id="velocidadValor">50</span></label>
-  <input type="range" id="velocidad" min="10" max="150" step="1" value="50" class="w-full mb-4">
+                <!-- Control de velocidad -->
+                <label for="velocidad" class="block mb-2 font-medium">Velocidad (km/h): <span
+                        id="velocidadValor">50</span></label>
+                <input type="range" id="velocidad" min="10" max="150" step="1" value="50" class="w-full mb-4">
 
-  <!-- Resultado de la distancia -->
-  <div class="mb-2">
-    <strong>Distancia de frenado estimada:</strong> <span id="distancia">...</span> metros
-  </div>
+                <!-- Resultado de la distancia -->
+                <div class="mb-2">
+                    <strong>Distancia de frenado estimada:</strong> <span id="distancia">...</span> metros
+                </div>
 
-  <!-- Barra de visualización -->
-  <div class="w-full h-6 bg-gray-300 rounded-full overflow-hidden">
-    <div id="barra" class="h-full bg-red-500 transition-all duration-300 ease-out" style="width: 0%;"></div>
-  </div>
-</section>
+                <!-- Barra de visualización -->
+                <div class="w-full h-6 bg-gray-300 rounded-full overflow-hidden">
+                    <div id="barra" class="h-full bg-red-500 transition-all duration-300 ease-out" style="width: 0%;">
+                    </div>
+                </div>
+            </section>
 
-<script>
-  const velocidadInput = document.getElementById('velocidad');
-  const velocidadValor = document.getElementById('velocidadValor');
-  const distanciaTexto = document.getElementById('distancia');
-  const barra = document.getElementById('barra');
+            <script>
+                const velocidadInput = document.getElementById('velocidad');
+                const velocidadValor = document.getElementById('velocidadValor');
+                const distanciaTexto = document.getElementById('distancia');
+                const barra = document.getElementById('barra');
 
-  // Constantes para la fórmula
-  const tiempoReaccion = 1.5; // en segundos
-  const desaceleracion = 8; // m/s² (valor medio)
+                // Constantes para la fórmula
+                const tiempoReaccion = 1.5; // en segundos
+                const desaceleracion = 8; // m/s² (valor medio)
 
-  function actualizarDistancia() {
-    const velocidadKmH = parseInt(velocidadInput.value);
-    velocidadValor.textContent = velocidadKmH;
+                function actualizarDistancia() {
+                    const velocidadKmH = parseInt(velocidadInput.value);
+                    velocidadValor.textContent = velocidadKmH;
 
-    const velocidadMS = velocidadKmH / 3.6; // conversión a m/s
+                    const velocidadMS = velocidadKmH / 3.6; // conversión a m/s
 
-    // Fórmula de distancia de frenado
-    const distancia = velocidadMS * tiempoReaccion + (velocidadMS ** 2) / (2 * desaceleracion);
-    const distanciaRedondeada = distancia.toFixed(1);
-    distanciaTexto.textContent = distanciaRedondeada;
+                    // Fórmula de distancia de frenado
+                    const distancia = velocidadMS * tiempoReaccion + (velocidadMS ** 2) / (2 * desaceleracion);
+                    const distanciaRedondeada = distancia.toFixed(1);
+                    distanciaTexto.textContent = distanciaRedondeada;
 
-    // Actualizar barra proporcional (máximo a 300m)
-    const ancho = Math.min((distancia / 300) * 100, 100); // max 100%
-    barra.style.width = `${ancho}%`;
-  }
+                    // Actualizar barra proporcional (máximo a 300m)
+                    const ancho = Math.min((distancia / 300) * 100, 100); // max 100%
+                    barra.style.width = `${ancho}%`;
+                }
 
-  velocidadInput.addEventListener('input', actualizarDistancia);
-  actualizarDistancia(); // inicializar al cargar
-</script>
+                velocidadInput.addEventListener('input', actualizarDistancia);
+                actualizarDistancia(); // inicializar al cargar
+            </script>
 
-            
+
             <!-- Section 1: Accidents and Deaths Caused by Speeding -->
             <section class="mb-12">
-                <h2 class="section-header text-2xl font-bold mb-6">🚗 Accidentes y Muertes Causadas por Exceso de Velocidad</h2>
+                <h2 class="section-header text-2xl font-bold mb-6">🚗 Accidentes y Muertes Causadas por Exceso de
+                    Velocidad</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-blue-50 p-6 rounded-lg shadow-inner">
                         <h3 class="text-lg font-semibold mb-4">En España (2022):</h3>
@@ -564,15 +1614,18 @@
                             </div>
                             <div class="stat-card bg-white p-4 shadow">
                                 <div class="text-3xl font-bold text-red-600 mb-1">261</div>
-                                <p class="text-sm">Accidentes mortales donde la velocidad inadecuada fue un factor contribuyente (25%)</p>
+                                <p class="text-sm">Accidentes mortales donde la velocidad inadecuada fue un factor
+                                    contribuyente (25%)</p>
                             </div>
                             <div class="stat-card bg-white p-4 shadow">
                                 <div class="text-3xl font-bold text-red-600 mb-1">1 de cada 5</div>
-                                <p class="text-sm">Accidentes mortales donde el exceso de velocidad fue un factor clave</p>
+                                <p class="text-sm">Accidentes mortales donde el exceso de velocidad fue un factor clave
+                                </p>
                             </div>
                             <div class="stat-card bg-white p-4 shadow">
                                 <div class="text-3xl font-bold text-red-600 mb-1">Más del 60%</div>
-                                <p class="text-sm">De los conductores fallecidos en accidentes relacionados con la velocidad eran jóvenes o de mediana edad</p>
+                                <p class="text-sm">De los conductores fallecidos en accidentes relacionados con la
+                                    velocidad eran jóvenes o de mediana edad</p>
                             </div>
                         </div>
 
@@ -580,15 +1633,18 @@
                     <div class="bg-blue-50 p-6 rounded-lg shadow-inner flex flex-col justify-between">
                         <h3 class="text-lg font-semibold mb-4">Principales Causas de Accidentes Mortales</h3>
                         <div class="h-80">
-                            <canvas id="accidentCausesChart" style="display: block; box-sizing: border-box; height: 320px; width: 476px;" width="596" height="400"></canvas>
+                            <canvas id="accidentCausesChart"
+                                style="display: block; box-sizing: border-box; height: 320px; width: 476px;" width="596"
+                                height="400"></canvas>
                         </div>
                         <div class="mt-4 text-sm text-center">
-                            <p class="font-semibold">El exceso de velocidad es la segunda causa más común de accidentes mortales en España</p>
+                            <p class="font-semibold">El exceso de velocidad es la segunda causa más común de accidentes
+                                mortales en España</p>
                         </div>
                     </div>
                 </div>
             </section>
-            
+
             <!-- Section 2: Consequences of Speeding -->
             <section class="mb-12">
                 <h2 class="section-header text-2xl font-bold mb-6">⚠️ Consecuencias del Exceso de Velocidad</h2>
@@ -597,109 +1653,142 @@
                         <h3 class="text-lg font-semibold mb-4">Impacto en la Seguridad:</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="consequence-card bg-white p-4 rounded-lg shadow flex items-start">
-                                <div class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
+                                <div
+                                    class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
                                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path>
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z"
+                                            clip-rule="evenodd"></path>
                                     </svg>
                                 </div>
                                 <div>
                                     <h4 class="font-semibold mb-1">Reduce el tiempo de reacción</h4>
-                                    <p class="text-xs text-gray-600">Menos tiempo para identificar y responder a peligros</p>
+                                    <p class="text-xs text-gray-600">Menos tiempo para identificar y responder a
+                                        peligros</p>
                                 </div>
                             </div>
                             <div class="consequence-card bg-white p-4 rounded-lg shadow flex items-start">
-                                <div class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
+                                <div
+                                    class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
                                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                        <path fill-rule="evenodd"
+                                            d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
+                                            clip-rule="evenodd"></path>
                                     </svg>
                                 </div>
                                 <div>
                                     <h4 class="font-semibold mb-1">Aumenta la distancia de frenado</h4>
-                                    <p class="text-xs text-gray-600">Requiere más espacio para detenerse por completo</p>
+                                    <p class="text-xs text-gray-600">Requiere más espacio para detenerse por completo
+                                    </p>
                                 </div>
                             </div>
                             <div class="consequence-card bg-white p-4 rounded-lg shadow flex items-start">
-                                <div class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
+                                <div
+                                    class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
                                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z"></path>
+                                        <path
+                                            d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z">
+                                        </path>
                                     </svg>
                                 </div>
                                 <div>
                                     <h4 class="font-semibold mb-1">Más difícil de controlar</h4>
-                                    <p class="text-xs text-gray-600">El vehículo se vuelve menos estable y menos manejable</p>
+                                    <p class="text-xs text-gray-600">El vehículo se vuelve menos estable y menos
+                                        manejable</p>
                                 </div>
                             </div>
                             <div class="consequence-card bg-white p-4 rounded-lg shadow flex items-start">
-                                <div class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
+                                <div
+                                    class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
                                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        <path fill-rule="evenodd"
+                                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                            clip-rule="evenodd"></path>
                                     </svg>
                                 </div>
                                 <div>
                                     <h4 class="font-semibold mb-1">Más accidentes</h4>
-                                    <p class="text-xs text-gray-600">Aumenta el riesgo de vuelcos o salidas de la vía</p>
+                                    <p class="text-xs text-gray-600">Aumenta el riesgo de vuelcos o salidas de la vía
+                                    </p>
                                 </div>
                             </div>
 
-<div class="consequence-card bg-white p-4 rounded-lg shadow flex items-start">
-  <div class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
-    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM10 8a2 2 0 110 4 2 2 0 010-4z" clip-rule="evenodd"></path>
-    </svg>
-  </div>
-  <div>
-    <h4 class="font-semibold mb-1">Incrementa la gravedad de las colisiones</h4>
-    <p class="text-xs text-gray-600">A mayor velocidad, mayor es la energía liberada al chocar</p>
-  </div>
-</div>
+                            <div class="consequence-card bg-white p-4 rounded-lg shadow flex items-start">
+                                <div
+                                    class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM10 8a2 2 0 110 4 2 2 0 010-4z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold mb-1">Incrementa la gravedad de las colisiones</h4>
+                                    <p class="text-xs text-gray-600">A mayor velocidad, mayor es la energía liberada al
+                                        chocar</p>
+                                </div>
+                            </div>
 
-<div class="consequence-card bg-white p-4 rounded-lg shadow flex items-start">
-  <div class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
-    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-      <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm-1 5a1 1 0 112 0v2a1 1 0 11-2 0V7zm1 6a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" clip-rule="evenodd"/>
-    </svg>
-  </div>
-  <div>
-    <h4 class="font-semibold mb-1">Genera tensión en otros conductores</h4>
-    <p class="text-xs text-gray-600">La velocidad excesiva puede intimidar o poner nerviosos a quienes comparten la vía</p>
-  </div>
-</div>
+                            <div class="consequence-card bg-white p-4 rounded-lg shadow flex items-start">
+                                <div
+                                    class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 2a8 8 0 100 16 8 8 0 000-16zm-1 5a1 1 0 112 0v2a1 1 0 11-2 0V7zm1 6a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold mb-1">Genera tensión en otros conductores</h4>
+                                    <p class="text-xs text-gray-600">La velocidad excesiva puede intimidar o poner
+                                        nerviosos a quienes comparten la vía</p>
+                                </div>
+                            </div>
 
 
 
                         </div>
                     </div>
 
-  <div class="bg-blue-50 p-6 rounded-lg shadow-inner space-y-4">
-    <div class="definition-box">
-      <p><strong>Una velocidad adecuada podría evitar una cuarta parte de las muertes en carretera.</strong> Según la DGT, respetar los límites salva vidas.</p>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="stat-card bg-white p-4">
-        <p class="font-semibold text-blue-700">👣 A partir de 80 km/h, es casi imposible que un peatón sobreviva a un atropello.</p>
-        <p class="text-sm text-gray-600 mt-2">En cambio, a 30 km/h, el riesgo de muerte del peatón se reduce al 5%.</p>
-      </div>
-      <div class="stat-card bg-white p-4">
-        <p class="font-semibold text-blue-700">⚡ A más velocidad, menos margen de reacción.</p>
-        <p class="text-sm text-gray-600 mt-2">La posibilidad de evitar un accidente disminuye drásticamente.</p>
-      </div>
-      <div class="stat-card bg-white p-4">
-        <p class="font-semibold text-blue-700">💥 Mayor velocidad, mayor energía de impacto.</p>
-        <p class="text-sm text-gray-600 mt-2">Eso se traduce en lesiones más graves o mortales.</p>
-      </div>
-      <div class="stat-card bg-white p-4">
-        <p class="font-semibold text-blue-700">📊 Si la velocidad media bajara solo 1 km/h...</p>
-        <p class="text-sm text-gray-600 mt-2">Se podrían evitar hasta 2.200 muertes al año en la UE (ETSC).</p>
-      </div>
-    </div>
-  </div>
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-inner space-y-4">
+                        <div class="definition-box">
+                            <p><strong>Una velocidad adecuada podría evitar una cuarta parte de las muertes en
+                                    carretera.</strong> Según la DGT, respetar los límites salva vidas.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="stat-card bg-white p-4">
+                                <p class="font-semibold text-blue-700">👣 A partir de 80 km/h, es casi imposible que un
+                                    peatón sobreviva a un atropello.</p>
+                                <p class="text-sm text-gray-600 mt-2">En cambio, a 30 km/h, el riesgo de muerte del
+                                    peatón se reduce al 5%.</p>
+                            </div>
+                            <div class="stat-card bg-white p-4">
+                                <p class="font-semibold text-blue-700">⚡ A más velocidad, menos margen de reacción.</p>
+                                <p class="text-sm text-gray-600 mt-2">La posibilidad de evitar un accidente disminuye
+                                    drásticamente.</p>
+                            </div>
+                            <div class="stat-card bg-white p-4">
+                                <p class="font-semibold text-blue-700">💥 Mayor velocidad, mayor energía de impacto.</p>
+                                <p class="text-sm text-gray-600 mt-2">Eso se traduce en lesiones más graves o mortales.
+                                </p>
+                            </div>
+                            <div class="stat-card bg-white p-4">
+                                <p class="font-semibold text-blue-700">📊 Si la velocidad media bajara solo 1 km/h...
+                                </p>
+                                <p class="text-sm text-gray-600 mt-2">Se podrían evitar hasta 2.200 muertes al año en la
+                                    UE (ETSC).</p>
+                            </div>
+                        </div>
+                    </div>
 
 
-                    
+
                     <div class="bg-blue-50 p-6 rounded-lg shadow-inner">
                         <h3 class="text-lg font-semibold mb-4">Tasa de Mortalidad de Peatones según Velocidad</h3>
                         <div class="h-64">
-                            <canvas id="pedestrianFatalityChart" style="display: block; box-sizing: border-box; height: 256px; width: 476px;" width="596" height="320"></canvas>
+                            <canvas id="pedestrianFatalityChart"
+                                style="display: block; box-sizing: border-box; height: 256px; width: 476px;" width="596"
+                                height="320"></canvas>
                         </div>
                         <div class="mt-4 text-sm">
                             <ul class="list-disc pl-5 space-y-1">
@@ -708,7 +1797,7 @@
                                 <li>A 80 km/h, casi ningún peatón sobrevive</li>
                             </ul>
                         </div>
-                        
+
                         <!-- Ilustración de impacto a diferentes velocidades -->
                         <div class="mt-4 bg-white p-3 rounded-lg shadow">
                             <h4 class="text-sm font-semibold text-center mb-2">Impacto según velocidad</h4>
@@ -716,15 +1805,22 @@
                                 <div class="text-center">
                                     <div class="relative inline-block">
                                         <svg width="60" height="60" viewBox="0 0 60 60">
-                                            <circle cx="30" cy="30" r="25" fill="#68d391" stroke="#38a169" stroke-width="2"></circle>
-                                            <text x="30" y="35" text-anchor="middle" font-size="16" font-weight="bold" fill="#2f855a">30</text>
+                                            <circle cx="30" cy="30" r="25" fill="#68d391" stroke="#38a169"
+                                                stroke-width="2"></circle>
+                                            <text x="30" y="35" text-anchor="middle" font-size="16" font-weight="bold"
+                                                fill="#2f855a">30</text>
                                             <!-- Peatón -->
                                             <circle cx="30" cy="20" r="3" fill="#2d3748"></circle>
-                                            <line x1="30" y1="23" x2="30" y2="35" stroke="#2d3748" stroke-width="2"></line>
-                                            <line x1="30" y1="35" x2="25" y2="45" stroke="#2d3748" stroke-width="2"></line>
-                                            <line x1="30" y1="35" x2="35" y2="45" stroke="#2d3748" stroke-width="2"></line>
-                                            <line x1="30" y1="28" x2="25" y2="33" stroke="#2d3748" stroke-width="2"></line>
-                                            <line x1="30" y1="28" x2="35" y2="33" stroke="#2d3748" stroke-width="2"></line>
+                                            <line x1="30" y1="23" x2="30" y2="35" stroke="#2d3748" stroke-width="2">
+                                            </line>
+                                            <line x1="30" y1="35" x2="25" y2="45" stroke="#2d3748" stroke-width="2">
+                                            </line>
+                                            <line x1="30" y1="35" x2="35" y2="45" stroke="#2d3748" stroke-width="2">
+                                            </line>
+                                            <line x1="30" y1="28" x2="25" y2="33" stroke="#2d3748" stroke-width="2">
+                                            </line>
+                                            <line x1="30" y1="28" x2="35" y2="33" stroke="#2d3748" stroke-width="2">
+                                            </line>
                                         </svg>
                                     </div>
                                     <p class="text-xs mt-1">10% mortalidad</p>
@@ -732,15 +1828,22 @@
                                 <div class="text-center">
                                     <div class="relative inline-block">
                                         <svg width="60" height="60" viewBox="0 0 60 60">
-                                            <circle cx="30" cy="30" r="25" fill="#fbd38d" stroke="#ed8936" stroke-width="2"></circle>
-                                            <text x="30" y="35" text-anchor="middle" font-size="16" font-weight="bold" fill="#c05621">50</text>
+                                            <circle cx="30" cy="30" r="25" fill="#fbd38d" stroke="#ed8936"
+                                                stroke-width="2"></circle>
+                                            <text x="30" y="35" text-anchor="middle" font-size="16" font-weight="bold"
+                                                fill="#c05621">50</text>
                                             <!-- Peatón herido -->
                                             <circle cx="30" cy="20" r="3" fill="#e53e3e"></circle>
-                                            <line x1="30" y1="23" x2="30" y2="35" stroke="#e53e3e" stroke-width="2"></line>
-                                            <line x1="30" y1="35" x2="22" y2="40" stroke="#e53e3e" stroke-width="2"></line>
-                                            <line x1="30" y1="35" x2="38" y2="40" stroke="#e53e3e" stroke-width="2"></line>
-                                            <line x1="30" y1="28" x2="22" y2="30" stroke="#e53e3e" stroke-width="2"></line>
-                                            <line x1="30" y1="28" x2="38" y2="30" stroke="#e53e3e" stroke-width="2"></line>
+                                            <line x1="30" y1="23" x2="30" y2="35" stroke="#e53e3e" stroke-width="2">
+                                            </line>
+                                            <line x1="30" y1="35" x2="22" y2="40" stroke="#e53e3e" stroke-width="2">
+                                            </line>
+                                            <line x1="30" y1="35" x2="38" y2="40" stroke="#e53e3e" stroke-width="2">
+                                            </line>
+                                            <line x1="30" y1="28" x2="22" y2="30" stroke="#e53e3e" stroke-width="2">
+                                            </line>
+                                            <line x1="30" y1="28" x2="38" y2="30" stroke="#e53e3e" stroke-width="2">
+                                            </line>
                                         </svg>
                                     </div>
                                     <p class="text-xs mt-1">50% mortalidad</p>
@@ -748,15 +1851,22 @@
                                 <div class="text-center">
                                     <div class="relative inline-block">
                                         <svg width="60" height="60" viewBox="0 0 60 60">
-                                            <circle cx="30" cy="30" r="25" fill="#feb2b2" stroke="#e53e3e" stroke-width="2"></circle>
-                                            <text x="30" y="35" text-anchor="middle" font-size="16" font-weight="bold" fill="#c53030">80</text>
+                                            <circle cx="30" cy="30" r="25" fill="#feb2b2" stroke="#e53e3e"
+                                                stroke-width="2"></circle>
+                                            <text x="30" y="35" text-anchor="middle" font-size="16" font-weight="bold"
+                                                fill="#c53030">80</text>
                                             <!-- Peatón gravemente herido -->
                                             <circle cx="30" cy="20" r="3" fill="#742a2a"></circle>
-                                            <line x1="30" y1="23" x2="25" y2="35" stroke="#742a2a" stroke-width="2"></line>
-                                            <line x1="25" y1="35" x2="15" y2="38" stroke="#742a2a" stroke-width="2"></line>
-                                            <line x1="25" y1="35" x2="30" y2="45" stroke="#742a2a" stroke-width="2"></line>
-                                            <line x1="30" y1="23" x2="35" y2="30" stroke="#742a2a" stroke-width="2"></line>
-                                            <line x1="35" y1="30" x2="45" y2="28" stroke="#742a2a" stroke-width="2"></line>
+                                            <line x1="30" y1="23" x2="25" y2="35" stroke="#742a2a" stroke-width="2">
+                                            </line>
+                                            <line x1="25" y1="35" x2="15" y2="38" stroke="#742a2a" stroke-width="2">
+                                            </line>
+                                            <line x1="25" y1="35" x2="30" y2="45" stroke="#742a2a" stroke-width="2">
+                                            </line>
+                                            <line x1="30" y1="23" x2="35" y2="30" stroke="#742a2a" stroke-width="2">
+                                            </line>
+                                            <line x1="35" y1="30" x2="45" y2="28" stroke="#742a2a" stroke-width="2">
+                                            </line>
                                         </svg>
                                     </div>
                                     <p class="text-xs mt-1">95% mortalidad</p>
@@ -764,230 +1874,291 @@
                             </div>
                         </div>
                     </div>
-  
-<!-- Mini Quiz Interactivo -->
-<div class="mt-4 bg-white p-3 rounded-lg shadow">
-  <h3 class="text-lg font-bold text-center mb-4">🧠 ¿Cuánto sabes sobre velocidad y seguridad vial?</h3>
-  <form id="quizForm" class="space-y-6 text-sm text-gray-700">
-    
-    <div>
-      <p class="font-semibold mb-2">1. ¿Cuál es la probabilidad de que un peatón muera si es atropellado a 80 km/h?</p>
-      <label><input type="radio" name="q1" value="a" class="mr-2">5%</label><br>
-      <label><input type="radio" name="q1" value="b" class="mr-2">50%</label><br>
-      <label><input type="radio" name="q1" value="c" class="mr-2">Casi el 100%</label>
-    </div>
 
-    <div>
-      <p class="font-semibold mb-2">2. ¿Qué efecto tiene una velocidad más alta en un choque?</p>
-      <label><input type="radio" name="q2" value="a" class="mr-2">Menos lesiones</label><br>
-      <label><input type="radio" name="q2" value="b" class="mr-2">Mayor energía y más gravedad</label><br>
-      <label><input type="radio" name="q2" value="c" class="mr-2">Más fácil de controlar el vehículo</label>
-    </div>
+                    <!-- Mini Quiz Interactivo -->
+                    <div class="mt-4 bg-white p-3 rounded-lg shadow">
+                        <h3 class="text-lg font-bold text-center mb-4">🧠 ¿Cuánto sabes sobre velocidad y seguridad
+                            vial?</h3>
+                        <form id="quizForm" class="space-y-6 text-sm text-gray-700">
 
-    <div>
-      <p class="font-semibold mb-2">3. ¿Qué podría lograrse si se redujera solo 1 km/h la velocidad media?</p>
-      <label><input type="radio" name="q3" value="a" class="mr-2">No tiene impacto</label><br>
-      <label><input type="radio" name="q3" value="b" class="mr-2">Evitar hasta 2.200 muertes al año en la UE</label><br>
-      <label><input type="radio" name="q3" value="c" class="mr-2">Mejorar el consumo del vehículo solamente</label>
-    </div>
+                            <div>
+                                <p class="font-semibold mb-2">1. ¿Cuál es la probabilidad de que un peatón muera si es
+                                    atropellado a 80 km/h?</p>
+                                <label><input type="radio" name="q1" value="a" class="mr-2">5%</label><br>
+                                <label><input type="radio" name="q1" value="b" class="mr-2">50%</label><br>
+                                <label><input type="radio" name="q1" value="c" class="mr-2">Casi el 100%</label>
+                            </div>
 
-    <div>
-      <p class="font-semibold mb-2">4. La distancia de frenado...</p>
-      <label><input type="radio" name="q4" value="a" class="mr-2">Normalmente es menor que la distancia de reacción</label><br>
-      <label><input type="radio" name="q4" value="b" class="mr-2">Coincide con la distancia de detención</label><br>
-      <label><input type="radio" name="q4" value="c" class="mr-2">Aumenta con la velocidad del vehículo</label>
-    </div>
+                            <div>
+                                <p class="font-semibold mb-2">2. ¿Qué efecto tiene una velocidad más alta en un choque?
+                                </p>
+                                <label><input type="radio" name="q2" value="a" class="mr-2">Menos lesiones</label><br>
+                                <label><input type="radio" name="q2" value="b" class="mr-2">Mayor energía y más
+                                    gravedad</label><br>
+                                <label><input type="radio" name="q2" value="c" class="mr-2">Más fácil de controlar el
+                                    vehículo</label>
+                            </div>
 
-    <div class="text-center space-x-2">
-      <button id="checkBtn" type="button" onclick="checkQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded">
-        Comprobar respuestas
-      </button>
-      <button id="resetBtn" type="button" onclick="resetQuiz()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-4 py-2 rounded" disabled>
-        Reiniciar quiz
-      </button>
-      <p id="quizResult" class="mt-4 font-semibold"></p>
-    </div>
-  </form>
-</div>
+                            <div>
+                                <p class="font-semibold mb-2">3. ¿Qué podría lograrse si se redujera solo 1 km/h la
+                                    velocidad media?</p>
+                                <label><input type="radio" name="q3" value="a" class="mr-2">No tiene impacto</label><br>
+                                <label><input type="radio" name="q3" value="b" class="mr-2">Evitar hasta 2.200 muertes
+                                    al año en la UE</label><br>
+                                <label><input type="radio" name="q3" value="c" class="mr-2">Mejorar el consumo del
+                                    vehículo solamente</label>
+                            </div>
 
-<script>
-  function checkQuiz() {
-    const answers = {
-      q1: 'c',
-      q2: 'b',
-      q3: 'b',
-      q4: 'c'
-    };
+                            <div>
+                                <p class="font-semibold mb-2">4. La distancia de frenado...</p>
+                                <label><input type="radio" name="q4" value="a" class="mr-2">Normalmente es menor que la
+                                    distancia de reacción</label><br>
+                                <label><input type="radio" name="q4" value="b" class="mr-2">Coincide con la distancia de
+                                    detención</label><br>
+                                <label><input type="radio" name="q4" value="c" class="mr-2">Aumenta con la velocidad del
+                                    vehículo</label>
+                            </div>
 
-    let correct = 0;
-    for (let q in answers) {
-      const selected = document.querySelector(`input[name="${q}"]:checked`);
-      if (selected && selected.value === answers[q]) {
-        correct++;
-      }
-    }
+                            <div class="text-center space-x-2">
+                                <button id="checkBtn" type="button" onclick="checkQuiz()"
+                                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded">
+                                    Comprobar respuestas
+                                </button>
+                                <button id="resetBtn" type="button" onclick="resetQuiz()"
+                                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-4 py-2 rounded"
+                                    disabled>
+                                    Reiniciar quiz
+                                </button>
+                                <p id="quizResult" class="mt-4 font-semibold"></p>
+                            </div>
+                        </form>
+                    </div>
 
-    const result = document.getElementById("quizResult");
-    if (correct === 4) {
-      result.textContent = "✅ ¡Perfecto! Has acertado todo. ¡Sigue así!";
-      result.className = "text-green-600 mt-4 font-semibold";
-    } else {
-      result.textContent = `🔍 Has acertado ${correct} de 4. Revisa la información y vuelve a intentarlo.`;
-      result.className = "text-yellow-600 mt-4 font-semibold";
-    }
+                    <script>
+                        function checkQuiz() {
+                            const answers = {
+                                q1: 'c',
+                                q2: 'b',
+                                q3: 'b',
+                                q4: 'c'
+                            };
 
-    // Desactiva botón "Comprobar respuestas"
-    const checkBtn = document.getElementById("checkBtn");
-    checkBtn.disabled = true;
-    checkBtn.classList.add("bg-gray-300", "cursor-not-allowed");
-    checkBtn.classList.remove("bg-blue-600", "hover:bg-blue-700");
+                            let correct = 0;
+                            for (let q in answers) {
+                                const selected = document.querySelector(`input[name="${q}"]:checked`);
+                                if (selected && selected.value === answers[q]) {
+                                    correct++;
+                                }
+                            }
 
-    // Activa botón "Reiniciar quiz"
-    const resetBtn = document.getElementById("resetBtn");
-    resetBtn.disabled = false;
+                            const result = document.getElementById("quizResult");
+                            if (correct === 4) {
+                                result.textContent = "✅ ¡Perfecto! Has acertado todo. ¡Sigue así!";
+                                result.className = "text-green-600 mt-4 font-semibold";
+                            } else {
+                                result.textContent = `🔍 Has acertado ${correct} de 4. Revisa la información y vuelve a intentarlo.`;
+                                result.className = "text-yellow-600 mt-4 font-semibold";
+                            }
 
-    // Desactiva todos los inputs tipo radio
-    const radios = document.querySelectorAll("#quizForm input[type='radio']");
-    radios.forEach(radio => radio.disabled = true);
-  }
+                            // Desactiva botón "Comprobar respuestas"
+                            const checkBtn = document.getElementById("checkBtn");
+                            checkBtn.disabled = true;
+                            checkBtn.classList.add("bg-gray-300", "cursor-not-allowed");
+                            checkBtn.classList.remove("bg-blue-600", "hover:bg-blue-700");
 
-  function resetQuiz() {
-    document.getElementById("quizForm").reset();
-    document.getElementById("quizResult").textContent = "";
+                            // Activa botón "Reiniciar quiz"
+                            const resetBtn = document.getElementById("resetBtn");
+                            resetBtn.disabled = false;
 
-    // Vuelve a activar los inputs tipo radio
-    const radios = document.querySelectorAll("#quizForm input[type='radio']");
-    radios.forEach(radio => radio.disabled = false);
+                            // Desactiva todos los inputs tipo radio
+                            const radios = document.querySelectorAll("#quizForm input[type='radio']");
+                            radios.forEach(radio => radio.disabled = true);
+                        }
 
-    // Reactiva botón "Comprobar respuestas"
-    const checkBtn = document.getElementById("checkBtn");
-    checkBtn.disabled = false;
-    checkBtn.classList.remove("bg-gray-300", "cursor-not-allowed");
-    checkBtn.classList.add("bg-blue-600", "hover:bg-blue-700");
+                        function resetQuiz() {
+                            document.getElementById("quizForm").reset();
+                            document.getElementById("quizResult").textContent = "";
 
-    // Desactiva botón "Reiniciar"
-    document.getElementById("resetBtn").disabled = true;
-  }
-</script>
+                            // Vuelve a activar los inputs tipo radio
+                            const radios = document.querySelectorAll("#quizForm input[type='radio']");
+                            radios.forEach(radio => radio.disabled = false);
+
+                            // Reactiva botón "Comprobar respuestas"
+                            const checkBtn = document.getElementById("checkBtn");
+                            checkBtn.disabled = false;
+                            checkBtn.classList.remove("bg-gray-300", "cursor-not-allowed");
+                            checkBtn.classList.add("bg-blue-600", "hover:bg-blue-700");
+
+                            // Desactiva botón "Reiniciar"
+                            document.getElementById("resetBtn").disabled = true;
+                        }
+                    </script>
 
 
 
-                    
+
 
             </section>
-            
+
             <!-- Section 3: Factors that Contribute to Speeding -->
-<section class="mb-8">
-  <h2 class="section-header text-2xl font-bold mb-6">🧪 Factores que Contribuyen al Exceso de Velocidad</h2>
-  <div class="bg-blue-50 p-6 rounded-lg shadow-inner">
-    <div class="flex flex-wrap justify-center gap-4">
-      
-      <!-- Conductores inexpertos -->
-      <div class="relative group factor-bubble bg-red-100 p-4 rounded-full w-32 h-32 flex items-center justify-center text-center shadow">
-        <div>
-          <svg class="w-8 h-8 mx-auto mb-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v1h8v-1zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-1a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v1H1v-3a3 3 0 013.75-2.906z"></path>
-          </svg>
-          <span class="text-sm font-semibold">Conductores inexpertos</span>
-        </div>
-        <div class="absolute bottom-full mb-2 w-44 text-sm text-white bg-gray-800 p-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-          Con poca experiencia, el control y la percepción del riesgo se ven reducidos.
-        </div>
-      </div>
+            <section class="mb-8">
+                <h2 class="section-header text-2xl font-bold mb-6">🧪 Factores que Contribuyen al Exceso de Velocidad
+                </h2>
+                <div class="bg-blue-50 p-6 rounded-lg shadow-inner">
+                    <div class="flex flex-wrap justify-center gap-4">
 
-      <!-- Alcohol o drogas -->
-      <div class="relative group factor-bubble bg-blue-100 p-4 rounded-full w-32 h-32 flex items-center justify-center text-center shadow">
-        <div>
-          <svg class="w-8 h-8 mx-auto mb-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
-            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
-          </svg>
-          <span class="text-sm font-semibold">Alcohol o drogas</span>
-        </div>
-        <div class="absolute bottom-full mb-2 w-44 text-sm text-white bg-gray-800 p-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-          Afectan la capacidad de reacción y toma de decisiones al volante.
-        </div>
-      </div>
+                        <!-- Conductores inexpertos -->
+                        <div
+                            class="relative group factor-bubble bg-red-100 p-4 rounded-full w-32 h-32 flex items-center justify-center text-center shadow">
+                            <div>
+                                <svg class="w-8 h-8 mx-auto mb-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v1h8v-1zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-1a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v1H1v-3a3 3 0 013.75-2.906z">
+                                    </path>
+                                </svg>
+                                <span class="text-sm font-semibold">Conductores inexpertos</span>
+                            </div>
+                            <div
+                                class="absolute bottom-full mb-2 w-44 text-sm text-white bg-gray-800 p-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                                Con poca experiencia, el control y la percepción del riesgo se ven reducidos.
+                            </div>
+                        </div>
 
-      <!-- Exceso de confianza -->
-      <div class="relative group factor-bubble bg-green-100 p-4 rounded-full w-32 h-32 flex items-center justify-center text-center shadow">
-        <div>
-          <svg class="w-8 h-8 mx-auto mb-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-          </svg>
-          <span class="text-sm font-semibold">Exceso de confianza</span>
-        </div>
-        <div class="absolute bottom-full mb-2 w-44 text-sm text-white bg-gray-800 p-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-          El exceso de confianza puede animarte a superar los límites de velocidad.
-        </div>
-      </div>
+                        <!-- Alcohol o drogas -->
+                        <div
+                            class="relative group factor-bubble bg-blue-100 p-4 rounded-full w-32 h-32 flex items-center justify-center text-center shadow">
+                            <div>
+                                <svg class="w-8 h-8 mx-auto mb-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                                    <path fill-rule="evenodd"
+                                        d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-sm font-semibold">Alcohol o drogas</span>
+                            </div>
+                            <div
+                                class="absolute bottom-full mb-2 w-44 text-sm text-white bg-gray-800 p-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                                Afectan la capacidad de reacción y toma de decisiones al volante.
+                            </div>
+                        </div>
 
-      <!-- Presión social -->
-      <div class="relative group factor-bubble bg-yellow-100 p-4 rounded-full w-32 h-32 flex items-center justify-center text-center shadow">
-        <div>
-          <svg class="w-8 h-8 mx-auto mb-2 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-          </svg>
-          <span class="text-sm font-semibold">Presión social</span>
-        </div>
-        <div class="absolute bottom-full mb-2 w-44 text-sm text-white bg-gray-800 p-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-          La presión social de amigos o compañeros puede llevar a conducir a altas velocidades.
-        </div>
-      </div>
+                        <!-- Exceso de confianza -->
+                        <div
+                            class="relative group factor-bubble bg-green-100 p-4 rounded-full w-32 h-32 flex items-center justify-center text-center shadow">
+                            <div>
+                                <svg class="w-8 h-8 mx-auto mb-2 text-green-600" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-sm font-semibold">Exceso de confianza</span>
+                            </div>
+                            <div
+                                class="absolute bottom-full mb-2 w-44 text-sm text-white bg-gray-800 p-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                                El exceso de confianza puede animarte a superar los límites de velocidad.
+                            </div>
+                        </div>
 
-      <!-- Presión de tiempo -->
-      <div class="relative group factor-bubble bg-purple-100 p-4 rounded-full w-32 h-32 flex items-center justify-center text-center shadow">
-        <div>
-          <svg class="w-8 h-8 mx-auto mb-2 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
-          </svg>
-          <span class="text-sm font-semibold">Presión de tiempo</span>
-        </div>
-        <div class="absolute bottom-full mb-2 w-44 text-sm text-white bg-gray-800 p-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-          La impaciencia y las prisas aumentan la probabilidad de exceder la velocidad.
-        </div>
-      </div>
+                        <!-- Presión social -->
+                        <div
+                            class="relative group factor-bubble bg-yellow-100 p-4 rounded-full w-32 h-32 flex items-center justify-center text-center shadow">
+                            <div>
+                                <svg class="w-8 h-8 mx-auto mb-2 text-yellow-600" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-sm font-semibold">Presión social</span>
+                            </div>
+                            <div
+                                class="absolute bottom-full mb-2 w-44 text-sm text-white bg-gray-800 p-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                                La presión social de amigos o compañeros puede llevar a conducir a altas velocidades.
+                            </div>
+                        </div>
 
-      <!-- Subestimar riesgos -->
-      <div class="relative group factor-bubble bg-indigo-100 p-4 rounded-full w-32 h-32 flex items-center justify-center text-center shadow">
-        <div>
-          <svg class="w-8 h-8 mx-auto mb-2 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-          </svg>
-          <span class="text-sm font-semibold">Subestimar riesgos</span>
-        </div>
-        <div class="absolute bottom-full mb-2 w-44 text-sm text-white bg-gray-800 p-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-          No tener en cuenta los riesgos puede llevar a una conducción imprudente.
-        </div>
-      </div>
+                        <!-- Presión de tiempo -->
+                        <div
+                            class="relative group factor-bubble bg-purple-100 p-4 rounded-full w-32 h-32 flex items-center justify-center text-center shadow">
+                            <div>
+                                <svg class="w-8 h-8 mx-auto mb-2 text-purple-600" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-sm font-semibold">Presión de tiempo</span>
+                            </div>
+                            <div
+                                class="absolute bottom-full mb-2 w-44 text-sm text-white bg-gray-800 p-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                                La impaciencia y las prisas aumentan la probabilidad de exceder la velocidad.
+                            </div>
+                        </div>
 
-    </div>
-  </div>
-</section>
+                        <!-- Subestimar riesgos -->
+                        <div
+                            class="relative group factor-bubble bg-indigo-100 p-4 rounded-full w-32 h-32 flex items-center justify-center text-center shadow">
+                            <div>
+                                <svg class="w-8 h-8 mx-auto mb-2 text-indigo-600" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-sm font-semibold">Subestimar riesgos</span>
+                            </div>
+                            <div
+                                class="absolute bottom-full mb-2 w-44 text-sm text-white bg-gray-800 p-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                                No tener en cuenta los riesgos puede llevar a una conducción imprudente.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
 
         </div>
-        
+
         <footer class="text-center text-gray-600 text-xs bg-white p-4 rounded-lg shadow">
             <h3 class="font-semibold mb-2">Fuentes / Bibliografía</h3>
             <ul class="space-y-1">
-                <li>Dirección General de Tráfico (DGT). "DGT en cifras - Resultados 2022". <a href="https://www.dgt.es/menusecundario/dgt-en-cifras/dgt-en-cifras-resultados/" class="text-blue-600 hover:underline" target="_blank">https://www.dgt.es/menusecundario/dgt-en-cifras/dgt-en-cifras-resultados/</a></li>
-                <li>Fundación MAPFRE. "Velocidad y Seguridad vial". <a href="https://www.fundacionmapfre.org/educacion-divulgacion/seguridad-vial/factores-de-riesgo/velocidad/" class="text-blue-600 hover:underline" target="_blank">https://www.fundacionmapfre.org/fundacion/es_es/programas/salud-prevencion/salud-movilidad-segura/seguridad-vial/</a></li>
-                <li>Dirección General de Tráfico (DGT) – Vídeo de campaña. <a href="https://www.youtube.com/watch?v=YkmDGbXhf5w" class="text-blue-600 hover:underline" target="_blank">https://www.youtube.com/watch?v=YkmDGbXhf5w</a></li>
-                <li>Dirección General de Tráfico (DGT) - "Distancia de reacción y frenado: campo de fútbol". <a href="https://revista.dgt.es/es/multimedia/infografia/2015/0706-Distancia-reaccion-y-frenado-campo-futbol.shtml" class="text-blue-600 hover:underline" target="_blank">https://revista.dgt.es/es/multimedia/infografia/2015/0706-Distancia-reaccion-y-frenado-campo-futbol.shtml</a></li>
-            <li>Dirección General de Tráfico (DGT) - "Principales factores siniestros". <a href="https://www.dgt.es/comunicacion/notas-de-prensa/20240715-la-velocidad-sigue-siendo-uno-de-los-principales-factores-concurrentes-de-los-siniestros-de-trafico/" class="text-blue-600 hover:underline" target="_blank">https://www.dgt.es/comunicacion/notas-de-prensa/20240715-la-velocidad-sigue-siendo-uno-de-los-principales-factores-concurrentes-de-los-siniestros-de-trafico/</a></li>
+                <li>Dirección General de Tráfico (DGT). "DGT en cifras - Resultados 2022". <a
+                        href="https://www.dgt.es/menusecundario/dgt-en-cifras/dgt-en-cifras-resultados/"
+                        class="text-blue-600 hover:underline"
+                        target="_blank">https://www.dgt.es/menusecundario/dgt-en-cifras/dgt-en-cifras-resultados/</a>
+                </li>
+                <li>Fundación MAPFRE. "Velocidad y Seguridad vial". <a
+                        href="https://www.fundacionmapfre.org/educacion-divulgacion/seguridad-vial/factores-de-riesgo/velocidad/"
+                        class="text-blue-600 hover:underline"
+                        target="_blank">https://www.fundacionmapfre.org/fundacion/es_es/programas/salud-prevencion/salud-movilidad-segura/seguridad-vial/</a>
+                </li>
+                <li>Dirección General de Tráfico (DGT) – Vídeo de campaña. <a
+                        href="https://www.youtube.com/watch?v=YkmDGbXhf5w" class="text-blue-600 hover:underline"
+                        target="_blank">https://www.youtube.com/watch?v=YkmDGbXhf5w</a></li>
+                <li>Dirección General de Tráfico (DGT) - "Distancia de reacción y frenado: campo de fútbol". <a
+                        href="https://revista.dgt.es/es/multimedia/infografia/2015/0706-Distancia-reaccion-y-frenado-campo-futbol.shtml"
+                        class="text-blue-600 hover:underline"
+                        target="_blank">https://revista.dgt.es/es/multimedia/infografia/2015/0706-Distancia-reaccion-y-frenado-campo-futbol.shtml</a>
+                </li>
+                <li>Dirección General de Tráfico (DGT) - "Principales factores siniestros". <a
+                        href="https://www.dgt.es/comunicacion/notas-de-prensa/20240715-la-velocidad-sigue-siendo-uno-de-los-principales-factores-concurrentes-de-los-siniestros-de-trafico/"
+                        class="text-blue-600 hover:underline"
+                        target="_blank">https://www.dgt.es/comunicacion/notas-de-prensa/20240715-la-velocidad-sigue-siendo-uno-de-los-principales-factores-concurrentes-de-los-siniestros-de-trafico/</a>
+                </li>
             </ul>
         </footer>
     </div>
 
     <script>
         // Charts
-        window.onload = function() {
+        window.onload = function () {
             // Set Chart.js defaults for all charts
             Chart.defaults.font.size = 12;
             Chart.defaults.font.family = "'Montserrat', sans-serif";
             Chart.defaults.plugins.legend.labels.boxWidth = 12;
             Chart.defaults.plugins.legend.labels.padding = 10;
-            
+
             // Accident Causes Chart
             const accidentCausesCtx = document.getElementById('accidentCausesChart').getContext('2d');
             new Chart(accidentCausesCtx, {
@@ -1021,7 +2192,7 @@
                         },
                         tooltip: {
                             callbacks: {
-                                label: function(context) {
+                                label: function (context) {
                                     return `${context.parsed.y}% de accidentes mortales`;
                                 }
                             }
@@ -1052,7 +2223,7 @@
                     }
                 }
             });
-            
+
             // Pedestrian Fatality Chart
             const pedestrianFatalityCtx = document.getElementById('pedestrianFatalityChart').getContext('2d');
             new Chart(pedestrianFatalityCtx, {
@@ -1084,7 +2255,7 @@
                         },
                         tooltip: {
                             callbacks: {
-                                label: function(context) {
+                                label: function (context) {
                                     return `${context.parsed.y}% tasa de mortalidad`;
                                 }
                             }
@@ -1105,19 +2276,19 @@
                     }
                 }
             });
-            
+
             // Add hover effects to the factor bubbles
             const factorBubbles = document.querySelectorAll('.factor-bubble');
             factorBubbles.forEach(bubble => {
-                bubble.addEventListener('mouseenter', function() {
+                bubble.addEventListener('mouseenter', function () {
                     this.classList.add('pulse-animation');
                 });
-                
-                bubble.addEventListener('mouseleave', function() {
+
+                bubble.addEventListener('mouseleave', function () {
                     this.classList.remove('pulse-animation');
                 });
             });
-            
+
             // Animate the speedometer needle
             const needle = document.querySelector('.speedometer-needle');
             let angle = 120;
@@ -1130,6 +2301,10 @@
             animateNeedle();
         };
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93f35c9961e9013f',t:'MTc0NzE1MTk1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'93f35c9961e9013f',t:'MTc0NzE1MTk1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+    <iframe height="1" width="1"
+        style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
 
-</body></html>
+</body>
+
+</html>
